@@ -11,8 +11,8 @@ class Forest {
     while(treeCount < n && attempts>0){
       attempts--;
       loadPCT = treeCount / (float)n;
-      int randX = (int)random(0,GRID_COLUMNS-2);
-      int randY = (int)random(0,GRID_ROWS-3);
+      int randX = (int)random(0,GRID_COLUMNS-1);
+      int randY = (int)random(0,GRID_ROWS-1);
       CompiledCell testCell = cMap.getCell(randX,randY);
       
       if(testCell.id >= 2 && testCell.id <= 5 && !testCell.isForest() && (!testCell.isCity())){
@@ -34,6 +34,5 @@ class Forest {
       t.update();
     }
     return this;
-  }
-  
+  } 
 }

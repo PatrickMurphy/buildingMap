@@ -33,10 +33,14 @@ class RandomBuilding {
     this.centerX = wid/2;
     this.centerY = len/2;
     this.influence = influence;
-    this.shapeCount = (int)random(1, 3);
+    this.shapeCount = (int)random(2, 5);
     this.maxHeight = (int)random(wid, wid*map(this.pop, 0, 100, 1, 5));
-    this.texture = building_textures[(int)random(0,100)%(building_textures.length)]; // random texture
+    this.texture = building_textures[(int)random(0, 100)%(building_textures.length)]; // random texture
+    
+    this.addRandomShapes();
+  }
 
+  void addRandomShapes() {
     while (shapes.size() < this.shapeCount) {
       tryAddShape();
     }

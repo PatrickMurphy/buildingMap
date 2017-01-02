@@ -16,7 +16,7 @@ final int GRID_ROWS = GRID_HEIGHT/CELL_SCALE;
 
 // Settings
 final int MAX_BUILDINGS = 900;
-final int MAX_TREES = 75;
+final int MAX_TREES = 175;
 final int MAP_HEIGHT_SCALE = 20*CELL_SCALE;
 
 boolean displayCity = false; // colors terrain with grey where the population map says we should have a city

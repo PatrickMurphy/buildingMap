@@ -4,12 +4,12 @@ class CompiledMap {
   int hSeed;
   int pSeed;
   int heightScale;
-  
+
   NoiseMap hMap;
   NoiseMap pMap;
-  
+
   CompiledCell[][] compiledCells;
-  
+
   String textName;
   ArrayList<RandomBuilding> buildings;
 
@@ -43,26 +43,29 @@ class CompiledMap {
     loadStep = "Generate Terrain";
     // for all the cells compute location in 3D space, use height to assign terrain type, and popu lation density map to determine if it is a city
     for (int y = 0; y<rows-1; y++) {
-      for (int x = 0; x<cols; x++) {
+      for (int x = 0; x<cols-1; x++) {
         loadPCT = float(y*(rows-1)+x)/(float)((rows-1)*cols);
         float cellHeight = hMap.getValue(x, y);
         float nextCellHeight = hMap.getValue(x, y+1);
-
-        // if this cell or it's neighbor is water, make the height at water level
-        if (cellHeight<=.32*heightScale) {
-          cellHeight = .32*heightScale;
-        }
-        if (nextCellHeight <= .32*heightScale) {
-          nextCellHeight = .32*heightScale;
-        }
+        float cellHeight2 = hMap.getValue(x+1, y);
+        float nextCellHeight2= hMap.getValue(x+1, y+1);
 
         float cellPopulation = pMap.getValue(x, y);
+        
+        // If lower than 32 percent, it is water, set it at 32 percent height
+        cellHeight = max(cellHeight, .32*heightScale);
+        nextCellHeight = max(nextCellHeight, .32*heightScale);
+        cellHeight2 = max(cellHeight2, .32*heightScale);
+        nextCellHeight2 = max(nextCellHeight2, .32*heightScale);
 
         // compute vectors for the corners of each cell according to scale
         Vector3 v1 = new Vector3(x*CELL_SCALE, y*CELL_SCALE, cellHeight);
         Vector3 v2 = new Vector3(x*CELL_SCALE, (y+1)*CELL_SCALE, nextCellHeight);
+        Vector3 v3 = new Vector3((x+1)*CELL_SCALE, y*CELL_SCALE, cellHeight2);
+        Vector3 v4 = new Vector3((x+1)*CELL_SCALE, (y+1)*CELL_SCALE, nextCellHeight2);
+        
         // Create Cell, realPosition Vectors and X,Y on the grid, population
-        CompiledCell newCell = new CompiledCell(v1, v2, x, y, cellPopulation);
+        CompiledCell newCell = new CompiledCell(v1, v2, v3, v4, x, y, cellPopulation);
 
         //println(newCell.getSlope());
 
@@ -80,7 +83,7 @@ class CompiledMap {
     CompiledCell  testCell;
     while (buildAttempts > 0 && buildingsPlaced < MAX_BUILDINGS) {
       buildAttempts--;
-      testCell = this.getCell((int)random(0, cols), (int)random(0, rows-1));
+      testCell = this.getCell((int)random(0, cols-1), (int)random(0, rows-1));
 
       // max 400 buildings, don't place on steep hills, population density over 30
       if (testCell.isCity() && !testCell.hasBuilding() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < cols-1) { 
@@ -92,14 +95,12 @@ class CompiledMap {
     }
     println("buildings "+ buildingsPlaced);
   }
-  
+
   void drawMap() {
     for (int y = 0; y<rows-1; y++) {
       beginShape(TRIANGLE_STRIP);
-      for (int x = 0; x<cols; x++) {
-        fill(compiledCells[x][y].getColor());
-        vertex(compiledCells[x][y].getVector1().getX(), compiledCells[x][y].getVector1().getY(), compiledCells[x][y].getVector1().getZ());
-        vertex(compiledCells[x][y].getVector2().getX(), compiledCells[x][y].getVector2().getY(), compiledCells[x][y].getVector2().getZ());
+      for (int x = 0; x<cols-1; x++) {
+        compiledCells[x][y].drawCell();
       }
       endShape();
     }

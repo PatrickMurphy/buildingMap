@@ -1,7 +1,7 @@
 class CompiledCell {
   float cellPopulation;
   color cellColor;
-  Vector3 v1, v2;
+  Vector3 v1, v2, v3, v4;
   boolean cityTile = false;
   boolean hasBuilding = false;
   boolean forestTile = false;
@@ -9,13 +9,23 @@ class CompiledCell {
 
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
 
-  CompiledCell(Vector3 cv1, Vector3 cv2, int x, int y, float cPop) {
+  CompiledCell(Vector3 cv1, Vector3 cv2, Vector3 cv3, Vector3 cv4, int x, int y, float cPop) {
     this.v1 = cv1;
     this.v2 = cv2;
+    this.v3 = cv3;
+    this.v4 = cv4;
     this.x = x;
     this.y = y;
     this.cellPopulation = cPop;
     this.getTerrain();
+  }
+  
+  void drawCell(){
+        fill(getColor());
+        vertex(getVector1().getX(), getVector1().getY(), getVector1().getZ());
+        vertex(getVector2().getX(), getVector2().getY(), getVector2().getZ());
+        vertex(getVector3().getX(), getVector3().getY(), getVector3().getZ());
+        vertex(getVector4().getX(), getVector4().getY(), getVector4().getZ());
   }
 
   Vector3 getVector1() {
@@ -23,6 +33,12 @@ class CompiledCell {
   }
   Vector3 getVector2() {
     return this.v2;
+  }
+  Vector3 getVector3() {
+    return this.v3;
+  }
+  Vector3 getVector4() {
+    return this.v4;
   }
 
   boolean isCity() {
@@ -58,6 +74,11 @@ class CompiledCell {
   float getPopulation() {
     return this.cellPopulation;
   }
+
+  void setColor(color c) {
+    this.cellColor = c;
+  }
+
   color getColor() {
     return this.cellColor;
   }
