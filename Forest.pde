@@ -11,12 +11,12 @@ class Forest {
     while(treeCount < n && attempts>0){
       attempts--;
       loadPCT = treeCount / (float)n;
-      int randX = (int)random(0,cols-2);
-      int randY = (int)random(0,rows-3);
+      int randX = (int)random(0,GRID_COLUMNS-2);
+      int randY = (int)random(0,GRID_ROWS-3);
       CompiledCell testCell = cMap.getCell(randX,randY);
       
       if(testCell.id >= 2 && testCell.id <= 5 && !testCell.isForest() && (!testCell.isCity())){
-        this.addTree(new Tree(new Vector3(cellScale/2,cellScale/2,0).add(testCell.v1)));
+        this.addTree(new Tree(new Vector3(CELL_SCALE/2,CELL_SCALE/2,0).add(testCell.v1)));
         testCell.setForest();
       }
     }

@@ -3,9 +3,10 @@ class CompiledCell {
   color cellColor;
   Vector3 v1, v2;
   boolean cityTile = false;
+  boolean hasBuilding = false;
   boolean forestTile = false;
   int x, y;
-  
+
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
 
   CompiledCell(Vector3 cv1, Vector3 cv2, int x, int y, float cPop) {
@@ -24,24 +25,34 @@ class CompiledCell {
     return this.v2;
   }
 
-  boolean isCity(){
+  boolean isCity() {
     return cityTile;
   }
-  
-  void setForest(){
+  void setHasBuilding() {
+    this.setHasBuilding(true);
+  }
+
+  void setHasBuilding(boolean b) {
+    this.hasBuilding = b;
+  }
+
+  boolean hasBuilding() {
+    return this.hasBuilding;
+  }
+  void setForest() {
     this.setForest(true);
   }
-  
-  void setForest(boolean f){
+
+  void setForest(boolean f) {
     this.forestTile = f;
   }
-  
-  boolean isForest(){
+
+  boolean isForest() {
     return forestTile;
   }
 
   float getSlope() {
-    return degrees(PVector.angleBetween(this.v1.convert(),this.v2.convert()));
+    return degrees(PVector.angleBetween(this.v1.convert(), this.v2.convert()));
   }
 
   float getPopulation() {
@@ -55,9 +66,9 @@ class CompiledCell {
     float heightValue = this.v1.z;
     float populationDensity = this.cellPopulation;
     int popFilter = mapPopFilter;
-    float heightScale = mapHeightScale;
+    float heightScale = MAP_HEIGHT_SCALE;
     color tempcolor = color(0, 0, 0);
-    
+
     if (heightValue <= .32*heightScale) { // water
       tempcolor = color(30, 144, 255);
       this.id = 0;
@@ -116,7 +127,7 @@ class CompiledCell {
       this.id = 7;
       tempcolor = color(map(heightValue, 0, heightScale, 0, 255));
     }
-    
+
     this.cellColor = tempcolor;
   }
 }

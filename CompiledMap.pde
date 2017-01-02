@@ -20,7 +20,7 @@ class CompiledMap {
     this.pSeed = int(random(500, 15000));
     //this.hSeed = 2025;
     //this.pSeed = 11399;
-    this.heightScale = mapHeightScale;
+    this.heightScale = MAP_HEIGHT_SCALE;
     noiseSeed(50);
 
     this.hMap = new NoiseMap(cols, rows, this.heightScale, 0.05, this.hSeed); // lower scale = more zoomed in
@@ -59,8 +59,8 @@ class CompiledMap {
         float cellPopulation = pMap.getValue(x, y);
 
         // compute vectors for the corners of each cell according to scale
-        Vector3 v1 = new Vector3(x*cellScale, y*cellScale, cellHeight);
-        Vector3 v2 = new Vector3(x*cellScale, (y+1)*cellScale, nextCellHeight);
+        Vector3 v1 = new Vector3(x*CELL_SCALE, y*CELL_SCALE, cellHeight);
+        Vector3 v2 = new Vector3(x*CELL_SCALE, (y+1)*CELL_SCALE, nextCellHeight);
         // Create Cell, realPosition Vectors and X,Y on the grid, population
         CompiledCell newCell = new CompiledCell(v1, v2, x, y, cellPopulation);
 
@@ -76,17 +76,18 @@ class CompiledMap {
     loadStep = "Generate Buildings";
     loadPCT = 0;
     int buildingsPlaced = 0;
-    int buildAttempts = maxBuildings * 3;
+    int buildAttempts = MAX_BUILDINGS * 3;
     CompiledCell  testCell;
-    while (buildAttempts > 0 && buildingsPlaced < maxBuildings) {
+    while (buildAttempts > 0 && buildingsPlaced < MAX_BUILDINGS) {
       buildAttempts--;
       testCell = this.getCell((int)random(0, cols), (int)random(0, rows-1));
 
       // max 400 buildings, don't place on steep hills, population density over 30
-      if (testCell.isCity() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < cols-1) { 
+      if (testCell.isCity() && !testCell.hasBuilding() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < cols-1) { 
         buildingsPlaced++;
-        loadPCT = buildingsPlaced/(float)maxBuildings;
-        buildings.add(new RandomBuilding(testCell.v1, cellScale, testCell.getPopulation()));
+        loadPCT = buildingsPlaced/(float)MAX_BUILDINGS;
+        testCell.setHasBuilding();
+        buildings.add(new RandomBuilding(testCell.v1, CELL_SCALE, testCell.getPopulation()));
       }
     }
     println("buildings "+ buildingsPlaced);

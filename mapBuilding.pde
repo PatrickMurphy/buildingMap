@@ -5,57 +5,72 @@ import peasy.org.apache.commons.math.geometry.*;
 PeasyCam camera;
 PVector lookAtPoint;
 
-int cols, rows;
-int overall_scale = 50;
-int cellScale = 1*overall_scale;
-int w = 30*overall_scale;
-int h = 30*overall_scale;
+final int OVERALL_SCALE = 50;
+final int CELL_SCALE = 1*OVERALL_SCALE;
+final int GRID_WIDTH = 30*OVERALL_SCALE;
+final int GRID_HEIGHT = 30*OVERALL_SCALE;
+
+// Numbers of Columns and Rows for cell grid, (over all width / width of one cell)
+final int GRID_COLUMNS = GRID_WIDTH/CELL_SCALE;
+final int GRID_ROWS = GRID_HEIGHT/CELL_SCALE;
 
 // Settings
-int maxBuildings = 100;
-int maxTrees = 75;
-int mapHeightScale = 25*cellScale;
+final int MAX_BUILDINGS = 900;
+final int MAX_TREES = 75;
+final int MAP_HEIGHT_SCALE = 20*CELL_SCALE;
+
 boolean displayCity = false; // colors terrain with grey where the population map says we should have a city
 Boolean showVisAid = true; // default state, toggled with "q"
+int mapPopFilter = 15; // this will effect how much of the map is categorized as "city"
 // End settings
-
-int mapPopFilter = 15;
 
 // state variable for what we are showing
 int displayMode = 0; // 0 = normal, 1 = heightMap2d, 2 = pop map 2d
 
 // Values for loading screen
 boolean loading = true;
-float loadPCT = 0.0;
+float loadPCT = 0.00;
 String loadStep = "Initialize";
 
+// collection of trees to display
 Forest forest;
+
+// Collection of CompiledCells that store cell position, cell height, terrain type and more
 CompiledMap cMap;
 
+// array of pre loaded textures
+PImage[] building_textures; 
+
 void setup() {
-  camera = new PeasyCam(this, w/2, h/2, 200, 4000);
+  camera = new PeasyCam(this, GRID_WIDTH/2, GRID_HEIGHT/2, 200, 4000);
   size(800, 800, P3D);
   noStroke();
 
-  cols = w/cellScale;
-  rows = h/cellScale;
+  // Default camera look position, center of grid
+  lookAtPoint = new PVector(GRID_COLUMNS/2, GRID_ROWS/2);
 
-  lookAtPoint = new PVector(cols/2, rows/2); // look at center
-
-  println(cols, rows, cols*rows); // print the grid width and length, and the total number of cells
+  println(GRID_COLUMNS, GRID_ROWS, GRID_COLUMNS*GRID_ROWS); // print the grid width and length, and the total number of cells
 
   // texture mode for buildings
   textureMode(NORMAL);
   textureWrap(REPEAT);
+  preLoadTextures();
 
   // start other thread for generating map so loading screen is displayed
-  thread("startLoading");
+  thread("startLoading"); // string of function name below
 }
 
 // thread for initializing the map
 void startLoading() {
-  cMap = new CompiledMap(overall_scale, cols, rows); // random terrain and buildings 
-  forest = new Forest(maxTrees); // create up to 50 random trees
+  cMap = new CompiledMap(OVERALL_SCALE, GRID_COLUMNS, GRID_ROWS); // random terrain and buildings 
+  forest = new Forest(MAX_TREES); // create up to maxTrees # of random trees
+}
+
+void preLoadTextures() {
+  building_textures = new PImage[11];
+  for (int i = 0; i<11; i++) {
+    building_textures[i] = loadImage("building_office"+(i+3)+".png");
+  }
 }
 
 // Main Draw loop, called every frame
@@ -133,8 +148,8 @@ void keyPressed() {
   }
 
   // Set camera look position
-  lookAtPoint.x = min(max(0, CameraFocusX), cols-1);
-  lookAtPoint.y = min(max(0, CameraFocusY), rows-2);
+  lookAtPoint.x = min(max(0, CameraFocusX), GRID_COLUMNS-1);
+  lookAtPoint.y = min(max(0, CameraFocusY), GRID_ROWS-2);
   camera.lookAt(cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.x, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.y, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.z);
 }
 

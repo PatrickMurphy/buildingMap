@@ -35,30 +35,43 @@ class RandomBuilding {
     this.influence = influence;
     this.shapeCount = (int)random(1, 3);
     this.maxHeight = (int)random(wid, wid*map(this.pop, 0, 100, 1, 5));
-    this.texture = loadImage("building_office"+(int)random(3, 13)+".png");
+    this.texture = building_textures[(int)random(0,100)%(building_textures.length)]; // random texture
 
-    while (shapes.size() <= this.shapeCount) {
+    while (shapes.size() < this.shapeCount) {
       tryAddShape();
     }
   }
 
   void tryAddShape() {
-    if (shapes.size() <= this.shapeCount) {
+    if (shapes.size() < this.shapeCount) {
       // try and place another shape
       int testX = (int)random(0, wid);
       int testY = (int)random(0, len);
 
       Shape r1;
 
-      if (random(0, 100)>60) {
-        r1 = new Circle(testX+x, testY+y, this.z, (int)random(min(testX, wid-testX)), (int)random(min(testY, len-testY)), texture);
-      } else {
-        r1 = new Rectangle(testX+x, testY+y, this.z, (int)random(wid/4, wid-testX), (int)random(len/4, len-testY), texture);
-      }
+      if (this.pop >= 50) {
+        // sky scaper
+        if (random(0, 100)>60) {
+          r1 = new Circle(testX+x, testY+y, this.z, (int)random(min(testX, wid-testX)), (int)random(min(testY, len-testY)), texture);
+        } else {
+          r1 = new Rectangle(testX+x, testY+y, this.z, (int)random(wid/4, wid-testX), (int)random(len/4, len-testY), texture);
+        }
 
-      if (r1.containsPoint(centerX+x, centerY+y)) {
-        r1.setHeight(map(r1.getArea(), 0, wid*len, this.maxHeight, 10));
-        shapes.add(r1);
+        if (r1.containsPoint(centerX+x, centerY+y)) {
+          r1.setHeight(map(r1.getArea(), 0, wid*len, this.maxHeight, 10));
+          shapes.add(r1);
+        }
+      } else {
+        // house
+        this.shapeCount = 1;
+        r1 = new Rectangle(testX+x, testY+y, this.z, (int)random(wid/4, wid-testX), (int)random(len/4, len-testY), texture);
+        if (r1.containsPoint(centerX+x, centerY+y)) {
+          r1.setHeight(map(r1.getArea(), 0, wid*len, this.maxHeight/4, 10));
+          Roof tempRoof = new Roof((Rectangle)r1);
+          shapes.add(tempRoof);
+          shapes.add(r1);
+        }
       }
     }
   }
