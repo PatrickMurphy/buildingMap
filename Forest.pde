@@ -1,3 +1,5 @@
+// A collection of trees for displaying easier
+
 class Forest {
   ArrayList <Tree> trees;
   int treeCount = 0;
@@ -19,11 +21,13 @@ class Forest {
       }
     }
   }
+  
   Forest addTree(Tree t){
     trees.add(t);
     treeCount++;
     return this;
   };
+  
   Forest display(){
     for (Tree t : trees) {
       t.display();
@@ -31,4 +35,5 @@ class Forest {
     }
     return this;
   }
+  
 }

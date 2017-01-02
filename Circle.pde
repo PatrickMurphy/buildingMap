@@ -4,6 +4,7 @@ class Circle implements Shape {
   color fill, stroke;
   float cirlceHeight;
   PImage texture;
+  
   Circle(int x, int y, int z, int r) {
     this(x, y, z, r, r, color(43), color(43), null);
   }

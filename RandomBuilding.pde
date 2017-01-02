@@ -67,14 +67,6 @@ class RandomBuilding {
     noFill();
     stroke(255);
     rect(x, y, wid, len);
-    fill(255, 0, 0);
-    //noStroke();
-    rect(x+centerX, y+centerY, wid/100, len/100);
-    rect(x, y, wid/100, len/100);
-    fill(0, 255, 0);
-    rect(x, y+len, wid/100, len/100);
-    fill(0, 0, 255);
-    rect(x+wid, y, wid/100, len/100);
     for (Shape s : shapes) {
       s.display3d();
     }

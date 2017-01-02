@@ -4,9 +4,12 @@ class CompiledMap {
   int hSeed;
   int pSeed;
   int heightScale;
+  
   NoiseMap hMap;
   NoiseMap pMap;
+  
   CompiledCell[][] compiledCells;
+  
   String textName;
   ArrayList<RandomBuilding> buildings;
 
@@ -38,7 +41,7 @@ class CompiledMap {
 
   void setupMap() {
     loadStep = "Generate Terrain";
-    // for all the cells compute location in 3D space, use height to assign terrain type, and population density map to determine if it is a city
+    // for all the cells compute location in 3D space, use height to assign terrain type, and popu lation density map to determine if it is a city
     for (int y = 0; y<rows-1; y++) {
       for (int x = 0; x<cols; x++) {
         loadPCT = float(y*(rows-1)+x)/(float)((rows-1)*cols);
@@ -58,7 +61,7 @@ class CompiledMap {
         // compute vectors for the corners of each cell according to scale
         Vector3 v1 = new Vector3(x*cellScale, y*cellScale, cellHeight);
         Vector3 v2 = new Vector3(x*cellScale, (y+1)*cellScale, nextCellHeight);
-        // Create Cell
+        // Create Cell, realPosition Vectors and X,Y on the grid, population
         CompiledCell newCell = new CompiledCell(v1, v2, x, y, cellPopulation);
 
         //println(newCell.getSlope());
