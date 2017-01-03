@@ -42,7 +42,7 @@ class Tree {
       float x = cos( radians( i * angle ) ) * r;
       float y = sin( radians( i * angle ) ) * r;
       vertex( this.pos.x+x, this.pos.y+y, this.pos.z+(treeHeight*age)/3.75);
-      vertex( this.pos.x+x, this.pos.y+y, this.pos.z-(treeHeight*age)/6);
+      vertex( this.pos.x+x, this.pos.y+y, this.pos.z-(treeHeight*age)/10);
     }
     endShape(CLOSE);
     

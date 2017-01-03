@@ -42,10 +42,16 @@ CompiledMap cMap;
 PImage[] building_textures; 
 
 void setup() {
-  camera = new PeasyCam(this, GRID_WIDTH/2, GRID_HEIGHT/2, 200, 4000);
   size(800, 800, P3D);
-  noStroke();
 
+  // start other thread for generating map so loading screen is displayed
+  thread("startLoading"); // string of function name below
+}
+
+// thread for initializing the map
+void startLoading() {
+  camera = new PeasyCam(this, GRID_WIDTH/2, GRID_HEIGHT/2, 200, 4000);
+  noStroke();
   // Default camera look position, center of grid
   lookAtPoint = new PVector(GRID_COLUMNS/2, GRID_ROWS/2);
 
@@ -56,12 +62,6 @@ void setup() {
   textureWrap(REPEAT);
   preLoadTextures();
 
-  // start other thread for generating map so loading screen is displayed
-  thread("startLoading"); // string of function name below
-}
-
-// thread for initializing the map
-void startLoading() {
   cMap = new CompiledMap(OVERALL_SCALE, GRID_COLUMNS, GRID_ROWS); // random terrain and buildings 
   forest = new Forest(MAX_TREES); // create up to maxTrees # of random trees
 }
@@ -88,8 +88,10 @@ void draw() {
 
       if (showVisAid) {
         // draw a ray up and down at camera look point
+
+        CompiledCell lookCell = cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y);
         stroke(255, 0, 0); // red
-        line(cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.x, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.y, 0, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.x, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.y, 1000);
+        line(lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 0, lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 1000);
         noStroke();
       }
     } else {
@@ -148,9 +150,13 @@ void keyPressed() {
   }
 
   // Set camera look position
-  lookAtPoint.x = min(max(0, CameraFocusX), GRID_COLUMNS-1);
+  lookAtPoint.x = min(max(0, CameraFocusX), GRID_COLUMNS-2);
   lookAtPoint.y = min(max(0, CameraFocusY), GRID_ROWS-2);
-  camera.lookAt(cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.x, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.y, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.z);
+
+  CompiledCell lookCell = cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y);
+  lookCell.getHeightAt(CELL_SCALE/2, CELL_SCALE/2);
+  //println("press", key);
+  camera.lookAt(cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.x+CELL_SCALE/2, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.y+CELL_SCALE/2, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.z);
 }
 
 // extension function for my own vector class // not used yet

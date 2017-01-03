@@ -18,8 +18,8 @@ class CompiledMap {
     this.rows = rows;
     this.hSeed = int(random(500, 15000));
     this.pSeed = int(random(500, 15000));
-    //this.hSeed = 2025;
-    //this.pSeed = 11399;
+    this.hSeed = 2025;
+    this.pSeed = 11399;
     this.heightScale = MAP_HEIGHT_SCALE;
     noiseSeed(50);
 
@@ -94,6 +94,14 @@ class CompiledMap {
       }
     }
     println("buildings "+ buildingsPlaced);
+  }
+  
+  float getHeightAt(int x, int y){
+    // takes real x and y
+    int tempx = floor(x/CELL_SCALE);
+    int tempy = floor(y/CELL_SCALE);
+    
+    return this.getCell(tempx,tempy).getHeightAt(x-(tempx*CELL_SCALE),y-(tempy*CELL_SCALE));
   }
 
   void drawMap() {

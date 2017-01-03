@@ -19,13 +19,13 @@ class CompiledCell {
     this.cellPopulation = cPop;
     this.getTerrain();
   }
-  
-  void drawCell(){
-        fill(getColor());
-        vertex(getVector1().getX(), getVector1().getY(), getVector1().getZ());
-        vertex(getVector2().getX(), getVector2().getY(), getVector2().getZ());
-        vertex(getVector3().getX(), getVector3().getY(), getVector3().getZ());
-        vertex(getVector4().getX(), getVector4().getY(), getVector4().getZ());
+
+  void drawCell() {
+    fill(getColor());
+    vertex(getVector1().getX(), getVector1().getY(), getVector1().getZ());
+    vertex(getVector2().getX(), getVector2().getY(), getVector2().getZ());
+    vertex(getVector3().getX(), getVector3().getY(), getVector3().getZ());
+    vertex(getVector4().getX(), getVector4().getY(), getVector4().getZ());
   }
 
   Vector3 getVector1() {
@@ -65,6 +65,31 @@ class CompiledCell {
 
   boolean isForest() {
     return forestTile;
+  }
+
+  float getHeightAt(int x, int y) {
+    //http://keisan.casio.com/exec/system/1223596129
+    PVector A = v1.convert();
+    
+    // if in the bottom triangle use other plane
+    if(y-((CELL_SCALE-1)-x) > 0){
+      A = v4.convert();
+    }
+    PVector B = v3.convert();
+    PVector C = v2.convert();
+
+    PVector AB = B.copy().sub(A);
+    PVector AC = C.copy().sub(A);
+
+    PVector ABAC = AB.copy().cross(AC);
+
+    float d = -((ABAC.x*A.x) + (ABAC.y*A.y) + (ABAC.z * A.z));
+
+
+
+    float zHeight = ((ABAC.x*(v1.x+float(x)))+(ABAC.y*(v1.y+float(y)))-v1.z+d)/-ABAC.z;
+    //println(ABAC,d,zHeight);
+    return zHeight;
   }
 
   float getSlope() {
