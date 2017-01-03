@@ -35,3 +35,12 @@ There are some parameters to play with in `mapBuilding.pde`:
 	* Time of day
 	* skybox
 	* Texture terrain and trees 
+
+## Top Down View
+![alt text](http://imgur.com/uJRC26D.jpg "Top Down View 3D")
+## Terrain Height Noise Map
+![alt text](http://imgur.com/9WmZ0QG.jpg "Height Map")
+## Population Density Noise Map
+![alt text](http://imgur.com/BPa5YIl.jpg "Population Density Map")
+## 3D view including trees
+![alt text](http://imgur.com/KpVAMBK.jpg "Trees and Buildings")
