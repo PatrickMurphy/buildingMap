@@ -26,16 +26,12 @@ There are some parameters to play with in `mapBuilding.pde`:
 # TODO:
 1. Buildings
 	* Optimize Random building geometry (Don't draw hidden stuff)
-	* make random generation quicker
 	* add more building type variety
 2. City
 	* Draw Roads
 	* cars?
 3. Environment
-	* place trees / buildings at height more accuratly to avoid floating elements
 	* Weather
 	* Time of day
 	* skybox
 	* Texture terrain and trees 
-4. Other
-    * remove Vector3 Class it doesn't do anything PVector processing built in doesn't do, wasn't aware when I wrote my own
