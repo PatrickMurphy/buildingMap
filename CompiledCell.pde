@@ -8,6 +8,8 @@ class CompiledCell implements Comparable<CompiledCell> {
   boolean forestTile = false;
   boolean roadTile = false;
   int x, y;
+  
+  ArrayList<TileObject> tileObjects;
 
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
   String[] types = new String[]{"Water", "Beach", "Low Lands", "Hills", "Foothils", "Mountain Start", "Mountain Mid", "Mountain Peak"};
@@ -21,6 +23,9 @@ class CompiledCell implements Comparable<CompiledCell> {
     this.x = x;
     this.y = y;
     this.cellPopulation = cPop;
+    
+    tileObjects = new ArrayList<TileObject>();
+    
     this.getTerrain();
   }
 
@@ -31,12 +36,29 @@ class CompiledCell implements Comparable<CompiledCell> {
     vertex(getVector3());
     vertex(getVector4());
   }
+  
+  void drawCellDetail() {
+    drawObjects();
+    if (hasBuilding) {
+      drawRoads();
+    }
+  }
+  
+  void drawObjects(){
+    // draw trees and buildings
+    for(TileObject o : this.tileObjects){
+      o.display();
+    }
+  }
 
   void drawCell2D() {
     int xwid = width/GRID_COLUMNS+1;
     int ywid = height/GRID_ROWS+1;
     fill(this.cellColor);
     rect(x*xwid, y*ywid, x+xwid, y+ywid);
+  }
+
+  void drawRoads() {
   }
 
   int compareTo(CompiledCell c) {
@@ -73,6 +95,11 @@ class CompiledCell implements Comparable<CompiledCell> {
   boolean isCity() {
     return cityTile;
   }
+  
+  void addBuilding(RandomBuilding b){
+    this.setHasBuilding();
+    tileObjects.add((TileObject)b);
+  }
   void setHasBuilding() {
     this.setHasBuilding(true);
   }
@@ -83,6 +110,11 @@ class CompiledCell implements Comparable<CompiledCell> {
 
   boolean hasBuilding() {
     return this.hasBuilding;
+  }
+  
+  void addTree(Tree t){
+    this.setForest();
+    tileObjects.add((TileObject)t);
   }
   void setForest() {
     this.setForest(true);

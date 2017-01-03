@@ -1,6 +1,6 @@
 class RandomBuilding implements TileObject {
   int x, y, z;
-  int wid, len;
+  int wid, len, padding;
   int centerX, centerY;
   int influence; // 0 = classic, 1 = modern
   int maxHeight;
@@ -30,6 +30,7 @@ class RandomBuilding implements TileObject {
     this.wid = wid;
     this.len = len;
     this.pop = pop;
+    this.padding = 10;
     this.centerX = wid/2;
     this.centerY = len/2;
     this.influence = influence;
@@ -49,8 +50,8 @@ class RandomBuilding implements TileObject {
   void tryAddShape() {
     if (shapes.size() < this.shapeCount) {
       // try and place another shape
-      int testX = (int)random(0, wid);
-      int testY = (int)random(0, len);
+      int testX = (int)random(this.padding, wid-this.padding);
+      int testY = (int)random(this.padding, len-this.padding);
 
       Shape r1;
 

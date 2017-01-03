@@ -18,28 +18,14 @@ class Forest {
       if (testCell.id >= 2 && testCell.id <= 5 && !testCell.isRoad() && !testCell.isForest() && (!testCell.isCity())) {
         PVector tree_pos = new PVector(CELL_SCALE/2, CELL_SCALE/2, 0).add(testCell.v1);
         tree_pos.z = testCell.getHeightAt(CELL_SCALE/2, CELL_SCALE/2);
-        this.addTree(new Tree(tree_pos, map(testCell.getPopulation(), 27, 100, 1, .1)));
-        testCell.setForest();
+        this.addTree(new Tree(tree_pos, map(testCell.getPopulation(), 27, 100, 1, .1)), testCell);
+        //testCell.setForest();
       }
     }
   }
 
-  Forest addTree(Tree t) {
-    trees.add(t);
+void addTree(Tree t, CompiledCell c) {
+    c.addTree(t);
     treeCount++;
-    return this;
   };
-
-  void display2D() {
-    for (Tree t : trees) {
-      t.display2D();
-    }
-  }
-
-  void display() {
-    for (Tree t : trees) {
-      t.display();
-      t.update();
-    }
-  }
 }

@@ -98,13 +98,7 @@ void draw() {
     if (displayMode==0) {
       // draw the terrain, and the buildings
       cMap.drawMap();
-
-      // draw the trees
-      forest.display();
-
-      // draw the buildings
-      city.display();
-
+      cMap.drawCellDetails();
 
       if (showVisAid) {
         // draw a ray up and down at camera look point
@@ -131,6 +125,7 @@ void draw() {
   }
   camera.beginHUD();
   text("FPS: "+frameRate, 15, 15);
+  text("X:" + lookAtPoint.x + " Y: " + lookAtPoint.y, 15, 25);
   camera.endHUD();
 }
 

@@ -100,7 +100,16 @@ class CompiledMap {
     }
   }
 
+  void drawCellDetails() {
+    for (int y = 0; y<rows-1; y++) {
+      for (int x = 0; x<cols-1; x++) {
+        compiledCells[x][y].drawCellDetail();
+      }
+    }
+  }
+
   void drawMap() {
+   //stroke(60);
     for (int y = 0; y<rows-1; y++) {
       beginShape(TRIANGLE_STRIP);
       for (int x = 0; x<cols-1; x++) {
@@ -108,5 +117,6 @@ class CompiledMap {
       }
       endShape();
     }
+   // noStroke();
   }
 }

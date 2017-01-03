@@ -64,8 +64,8 @@ class City {
       if (testCell.isCity() && !testCell.isRoad() && !testCell.hasBuilding() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < GRID_COLUMNS-1) { 
         buildingsPlaced++;
         loadPCT = buildingsPlaced/(float)MAX_BUILDINGS;
-        testCell.setHasBuilding();
-        buildings.add(new RandomBuilding((int)testCell.v1.x, (int)testCell.v1.y, (int)testCell.getMaxHeight(), CELL_SCALE, testCell.getPopulation()));
+        //testCell.setHasBuilding();
+        testCell.addBuilding(new RandomBuilding((int)testCell.v1.x, (int)testCell.v1.y, (int)testCell.getMaxHeight(), CELL_SCALE, testCell.getPopulation()));
       }
     }
     println("buildings "+ buildingsPlaced);
@@ -159,17 +159,5 @@ class City {
     //    cMap.getCell(x, c1.y).setColor(color(255, 80, 150));
     //  }
     //}
-  }
-
-  void display2D() {
-    for (RandomBuilding b : buildings) {
-      b.display2D();
-    }
-  }
-
-  void display() {
-    for (RandomBuilding b : buildings) {
-      b.display();
-    }
   }
 }
