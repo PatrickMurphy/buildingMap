@@ -7,9 +7,11 @@ Press W,A,S,D, Up, Down, Left, Right to move the camera focus.
 
 The camera is looking at the red line on the Z axis. Press Q to toggle.
 
-Press E to toggle between 3D map, 2D noise height map, and 2D population density noise map.
+Press E to toggle between 3D map, 2D map, 2D noise height map, and 2D population density noise map.
 
-Click and drag to move the camera.
+Press G to generate a new map
+
+Click and drag to move the camera, mouse wheel to zoom in.
 
 
 # Code Settings

@@ -1,4 +1,4 @@
-class RandomBuilding implements TileObject{
+class RandomBuilding implements TileObject {
   int x, y, z;
   int wid, len;
   int centerX, centerY;
@@ -33,10 +33,10 @@ class RandomBuilding implements TileObject{
     this.centerX = wid/2;
     this.centerY = len/2;
     this.influence = influence;
-    this.shapeCount = (int)random(2, 4);
+    this.shapeCount = (int)random(2, 3);
     this.maxHeight = (int)random(wid, wid*map(this.pop, 0, 100, 1, 5));
     this.texture = building_textures[(int)random(0, 100)%(building_textures.length)]; // random texture
-    
+
     this.addRandomShapes();
   }
 
@@ -80,16 +80,19 @@ class RandomBuilding implements TileObject{
     }
   }
 
-  PVector getPosition(){
-    return new PVector(x,y,z);
+  PVector getPosition() {
+    return new PVector(x, y, z);
+  }
+
+  void display2D() {
+    for (Shape s : shapes) {
+      s.display2D();
+    }
   }
 
   void display() {
-    noFill();
-    stroke(255);
-    rect(x, y, wid, len);
     for (Shape s : shapes) {
-      s.display3d();
+      s.display();
     }
   }
 }

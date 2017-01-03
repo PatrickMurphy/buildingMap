@@ -20,13 +20,15 @@ final int MAX_BUILDINGS = 900;
 final int MAX_TREES = 175;
 final int MAP_HEIGHT_SCALE = 20*CELL_SCALE;
 
+final boolean FULLSCREEN = false;
+
 boolean displayCity = false; // colors terrain with grey where the population map says we should have a city
 Boolean showVisAid = true; // default state, toggled with "q"
 int mapPopFilter = 15; // this will effect how much of the map is categorized as "city"
 // End settings
 
 // state variable for what we are showing
-int displayMode = 0; // 0 = normal, 1 = heightMap2d, 2 = pop map 2d
+int displayMode = 0; // 0 = normal, 1 = 2D map, 2 = heightMap2d, 3 = pop map 2d
 
 // Values for loading screen
 boolean loading = true;
@@ -48,6 +50,7 @@ PImage[] building_textures;
 void setup() {
   size(800, 800, P3D);
 
+
   // start other thread for generating map so loading screen is displayed
   thread("startLoading"); // string of function name below
 }
@@ -66,10 +69,16 @@ void startLoading() {
   textureWrap(REPEAT);
   preLoadTextures();
 
-  cMap = new CompiledMap(OVERALL_SCALE, GRID_COLUMNS, GRID_ROWS); // random terrain and buildings 
-  forest = new Forest(MAX_TREES); // create up to maxTrees # of random trees
-  city = new City();
 
+  generateNewMap();
+  loading = false;
+}
+
+void generateNewMap() {
+  loading = true;
+  cMap = new CompiledMap(OVERALL_SCALE, GRID_COLUMNS, GRID_ROWS); // random terrain and buildings 
+  city = new City();
+  forest = new Forest(MAX_TREES); // create up to maxTrees # of random trees
   loading = false;
 }
 
@@ -92,7 +101,7 @@ void draw() {
 
       // draw the trees
       forest.display();
-      
+
       // draw the buildings
       city.display();
 
@@ -107,15 +116,22 @@ void draw() {
     } else {
       camera.beginHUD(); // function to draw 2D
       if (displayMode == 1) {
+        cMap.display2D();
+        //city.display2D();
+        // forest.display2D();
+      } else if (displayMode == 2) {
         // display height map 2D noise values
-        cMap.hMap.display2D();
-      } else {
+        cMap.hMap.display2D(color(0, 0, 255), color(0, 255, 0));
+      } else if (displayMode == 3) {
         // display population map 2D noise values
-        cMap.pMap.display2D();
+        cMap.pMap.display2D(color(15, 15, 250), color(250, 15, 15));
       }
       camera.endHUD();
     }
   }
+  camera.beginHUD();
+  text("FPS: "+frameRate, 15, 15);
+  camera.endHUD();
 }
 
 void drawLoading() {
@@ -147,10 +163,13 @@ void keyPressed() {
     //back
     CameraFocusY--;
   }
+  if (key == 'g') {
+    generateNewMap();
+  }
 
   if (key == 'e') {
     // toggle display mode
-    displayMode = (displayMode+1)%3;
+    displayMode = (displayMode+1)%4;
   }
 
   if (key == 'q') {

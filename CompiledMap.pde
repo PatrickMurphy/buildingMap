@@ -20,7 +20,11 @@ class CompiledMap {
     //this.hSeed = 2025;
     //this.pSeed = 11399;
     this.heightScale = MAP_HEIGHT_SCALE;
+    // generates same noise map for same seed
     noiseSeed(50);
+
+    // generates same buildings on each map
+    randomSeed(pSeed+hSeed);
 
     this.hMap = new NoiseMap(cols, rows, this.heightScale, 0.05, this.hSeed); // lower scale = more zoomed in
     this.pMap = new NoiseMap(cols, rows, 100, 0.08, this.pSeed);
@@ -32,7 +36,11 @@ class CompiledMap {
   }
 
   CompiledCell getCell(int x, int y) {
-    return compiledCells[x][y];
+    if (x<0 || x>=GRID_COLUMNS-1 || y<0 || y>=GRID_ROWS-1) {
+      return null;
+    } else {
+      return compiledCells[x][y];
+    }
   }
 
   void setupMap() {
@@ -78,10 +86,18 @@ class CompiledMap {
     // takes real x and y
     x = min(x, GRID_WIDTH);
     y = min(y, GRID_HEIGHT);
-    int tempx = (int)map(x,0,GRID_WIDTH,0,GRID_COLUMNS-1);
-    int tempy = (int)map(y,0,GRID_HEIGHT,0,GRID_ROWS-1);
-    
+    int tempx = (int)map(x, 0, GRID_WIDTH, 0, GRID_COLUMNS-1);
+    int tempy = (int)map(y, 0, GRID_HEIGHT, 0, GRID_ROWS-1);
+
     return this.getCell(tempx, tempy).getHeightAt(x-(tempx*CELL_SCALE), y-(tempy*CELL_SCALE));
+  }
+
+  void display2D() {
+    for (int y = 0; y<rows-1; y++) {
+      for (int x = 0; x<cols-1; x++) {
+        compiledCells[x][y].drawCell2D();
+      }
+    }
   }
 
   void drawMap() {

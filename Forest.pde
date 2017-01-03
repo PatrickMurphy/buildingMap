@@ -8,33 +8,38 @@ class Forest {
     loadStep = "Add Trees";
     trees = new ArrayList<Tree>();
     attempts = n*5;
-    while(treeCount < n && attempts>0){
+    while (treeCount < n && attempts>0) {
       attempts--;
       loadPCT = treeCount / (float)n;
-      int randX = (int)random(0,GRID_COLUMNS-1);
-      int randY = (int)random(0,GRID_ROWS-1);
-      CompiledCell testCell = cMap.getCell(randX,randY);
-      
-      if(testCell.id >= 2 && testCell.id <= 5 && !testCell.isForest() && (!testCell.isCity())){
-        PVector tree_pos = new PVector(CELL_SCALE/2,CELL_SCALE/2,0).add(testCell.v1);
-        tree_pos.z = testCell.getHeightAt(CELL_SCALE/2,CELL_SCALE/2);
-        this.addTree(new Tree(tree_pos, map(testCell.getPopulation(),27,100,1,.1)));
+      int randX = (int)random(0, GRID_COLUMNS-1);
+      int randY = (int)random(0, GRID_ROWS-1);
+      CompiledCell testCell = cMap.getCell(randX, randY);
+
+      if (testCell.id >= 2 && testCell.id <= 5 && !testCell.isRoad() && !testCell.isForest() && (!testCell.isCity())) {
+        PVector tree_pos = new PVector(CELL_SCALE/2, CELL_SCALE/2, 0).add(testCell.v1);
+        tree_pos.z = testCell.getHeightAt(CELL_SCALE/2, CELL_SCALE/2);
+        this.addTree(new Tree(tree_pos, map(testCell.getPopulation(), 27, 100, 1, .1)));
         testCell.setForest();
       }
     }
   }
-  
-  Forest addTree(Tree t){
+
+  Forest addTree(Tree t) {
     trees.add(t);
     treeCount++;
     return this;
   };
-  
-  Forest display(){
+
+  void display2D() {
+    for (Tree t : trees) {
+      t.display2D();
+    }
+  }
+
+  void display() {
     for (Tree t : trees) {
       t.display();
       t.update();
     }
-    return this;
-  } 
+  }
 }

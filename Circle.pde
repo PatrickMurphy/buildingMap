@@ -4,7 +4,7 @@ class Circle implements Shape {
   color fill, stroke;
   float cirlceHeight;
   PImage texture;
-  
+
   Circle(int x, int y, int z, int r) {
     this(x, y, z, r, r, color(43), color(43), null);
   }
@@ -25,16 +25,15 @@ class Circle implements Shape {
     this.stroke = stroke;
     this.texture = texture;
   }
+  void display2D() {
+    fill(fill);
+    //stroke(stroke);
+    ellipse(map(x, 0, GRID_WIDTH-CELL_SCALE, 0, width), map(y, 0, GRID_HEIGHT-CELL_SCALE, 0, height), width*(this.wid/((float)GRID_WIDTH-CELL_SCALE)), height*(this.len/((float)GRID_HEIGHT-CELL_SCALE)));
+  }
   void display() {
     fill(fill);
-    stroke(stroke);
-    ellipse(x, y, wid, len);
-  }
-  void display3d() {
-    fill(fill);
-    stroke(stroke);
     noStroke();
-    float sides = 30;
+    float sides = 10;
     float h = this.getHeight();
     float r = wid;
 

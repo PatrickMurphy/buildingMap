@@ -55,15 +55,20 @@ class NoiseMap {
     }
   }
 
-  void display2D() {
+  void display2D(color c1, color c2) {
     int xwid = width/cols;
     int ywid = height/rows;
     for (int y = 0; y<rows; y++) {
       for (int x = 0; x<cols; x++) {
-        fill(color(map(this.getValue(x,y),0,this.heightScale,0,255)));
-        rect(x*xwid,y*ywid,x+xwid,y+ywid);
+        //fill(color(map(this.getValue(x, y), 0, this.heightScale, 0, 255)));
+        fill(lerpColor(c1,c2,this.getValue(x, y)/this.heightScale));
+        rect(x*xwid, y*ywid, x+xwid, y+ywid);
       }
     }
+  }
+
+  void display2D() {
+    display2D(0,255);
   }
 
   float getValue(int x, int y) {

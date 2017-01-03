@@ -1,4 +1,4 @@
-class CompiledCell {
+class CompiledCell implements Comparable<CompiledCell> {
   float cellPopulation;
   color cellColor;
   PVector v1, v2, v3, v4;
@@ -6,21 +6,22 @@ class CompiledCell {
   boolean cityTile = false;
   boolean hasBuilding = false;
   boolean forestTile = false;
+  boolean roadTile = false;
   int x, y;
 
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
+  String[] types = new String[]{"Water", "Beach", "Low Lands", "Hills", "Foothils", "Mountain Start", "Mountain Mid", "Mountain Peak"};
 
   CompiledCell(PVector cv1, PVector cv2, PVector cv3, PVector cv4, int x, int y, float cPop) {
     this.v1 = cv1;
     this.v2 = cv2;
     this.v3 = cv3;
     this.v4 = cv4;
-    this.maxHeight = max(new float[]{v1.z,v2.z,v3.z,v4.z});
+    this.maxHeight = max(new float[]{v1.z, v2.z, v3.z, v4.z});
     this.x = x;
     this.y = y;
     this.cellPopulation = cPop;
     this.getTerrain();
-
   }
 
   void drawCell() {
@@ -29,6 +30,31 @@ class CompiledCell {
     vertex(getVector2());
     vertex(getVector3());
     vertex(getVector4());
+  }
+
+  void drawCell2D() {
+    int xwid = width/GRID_COLUMNS+1;
+    int ywid = height/GRID_ROWS+1;
+    fill(this.cellColor);
+    rect(x*xwid, y*ywid, x+xwid, y+ywid);
+  }
+
+  int compareTo(CompiledCell c) {
+    int comp = 0;
+    if (this.getPopulation() < c.getPopulation()) {
+      comp = -1;
+    } else if (this.getPopulation() > c.getPopulation()) {
+      comp = 1;
+    }
+    return comp;
+  }
+
+  float distanceTo(CompiledCell c) {
+    return sqrt(sq(c.x-this.x)+sq(c.y-this.y));
+  }
+
+  String getType() {
+    return this.types[this.id];
   }
 
   PVector getVector1() {
@@ -66,20 +92,35 @@ class CompiledCell {
     this.forestTile = f;
   }
 
+  void setRoad() {
+    setRoad(true);
+  }
+
+  void setRoad(boolean r) {
+    this.roadTile = true;
+    if (this.cellColor != color(255, 0, 0)) {
+      this.cellColor = color(0);
+    }
+  }
+
+  boolean isRoad() {
+    return this.roadTile;
+  }
+
   boolean isForest() {
     return forestTile;
   }
-  
-  float getMaxHeight(){
+
+  float getMaxHeight() {
     return maxHeight;
   }
 
   float getHeightAt(int x, int y) {
     //http://keisan.casio.com/exec/system/1223596129
     PVector A = v1.copy();
-    
+
     // if in the bottom triangle use other plane
-    if(y-((CELL_SCALE-1)-x) > 0){
+    if (y-((CELL_SCALE-1)-x) > 0) {
       A = v4.copy();
     }
     PVector B = v3.copy();
@@ -115,6 +156,10 @@ class CompiledCell {
     return this.cellColor;
   }
 
+  String toString() {
+    return "Cell Type: "+this.getType() + " x: " + this.x + ", y: " + this.y + " Population: " + this.cellPopulation + " City: " + this.cityTile + " Forest: " + this.forestTile;
+  }
+
   void getTerrain() {
     float heightValue = this.v1.z;
     float populationDensity = this.cellPopulation;
@@ -125,6 +170,7 @@ class CompiledCell {
     if (heightValue <= .32*heightScale) { // water
       tempcolor = color(30, 144, 255);
       this.id = 0;
+      this.cellPopulation = 0;
     } else if (heightValue > .32*heightScale && heightValue <= .35*heightScale) {
       // beach
       this.id = 1;
@@ -137,7 +183,7 @@ class CompiledCell {
     } else if (heightValue > .35*heightScale && heightValue <= .5*heightScale) {
       // low lands
       this.id = 2;
-      tempcolor = color(50, 200, 15);
+      tempcolor = color(75, 147, 65);
       if (populationDensity >= (popFilter+12)) {
         this.cityTile = true;
         if (displayCity)
@@ -146,7 +192,7 @@ class CompiledCell {
     } else if (heightValue > .50*heightScale && heightValue <= .60*heightScale) {
       // hills
       this.id = 3;
-      tempcolor = color(28, 165, 94);
+      tempcolor = color(85, 165, 94);
       if (populationDensity >=  (popFilter+20)) {
         this.cityTile = true;
         if (displayCity)
@@ -173,12 +219,14 @@ class CompiledCell {
     } else if (heightValue > .70*heightScale && heightValue <= .75*heightScale) {
       // mountain mid
       this.id = 6;
+      this.cellPopulation = 0;
       tempcolor = color(124, 83, 7);
     } else {
       //peaks
       //other
       this.id = 7;
       tempcolor = color(map(heightValue, 0, heightScale, 0, 255));
+      this.cellPopulation = 0;
     }
 
     this.cellColor = tempcolor;

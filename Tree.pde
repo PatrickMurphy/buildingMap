@@ -21,19 +21,24 @@ class Tree implements TileObject {
     this.treeAngle = PI/((int) random(1, 6));
     this.topPoint = new PVector(this.pos.x, this.pos.y, this.pos.z+(treeHeight*this.age));
   }
-  
-  void update(){
+
+  void update() {
     // wind
     float angle = (millis()/3+(this.pos.x))%360;
-    float strength = map((second()+this.pos.y)%100,0,100,-1,1);
+    float strength = map((second()+this.pos.y)%100, 0, 100, -1, 1);
     this.topPoint.x = this.pos.x + ((2*this.age * cos(radians(angle)))*strength);
     this.topPoint.y = this.pos.y + ((2*this.age * sin(radians(angle)))*strength);
   }
-  
-  PVector getPosition(){
+
+  PVector getPosition() {
     return this.pos;
   }
   
+  void display2D() {
+    fill(20, 175, 10); //green
+    ellipse(map(this.pos.x, 0, GRID_WIDTH-CELL_SCALE, 0, width), map(this.pos.y, 0, GRID_HEIGHT-CELL_SCALE, 0, height), width*(((4*this.age)*2)/((float)GRID_WIDTH-CELL_SCALE))*2, height*(((4*this.age)*2)/((float)GRID_HEIGHT-CELL_SCALE))*2);
+  }
+
   void display() {
     fill(112, 74, 12);
     // add cylindar
@@ -49,19 +54,20 @@ class Tree implements TileObject {
       vertex( this.pos.x+x, this.pos.y+y, this.pos.z-(treeHeight*age)/10);
     }
     endShape(CLOSE);
-    
+
     sides = 10;
     angle = 360 / sides;
-    
+    lights();
     // add leaves/branches
-    fill(20,175,10); //green
+   fill(20, 175, 10); //green
     beginShape(TRIANGLE_STRIP);
     for (int i = 0; i < sides + 1; i++) {
       float x = cos( radians( i * angle ) ) * r*4.3;
       float y = sin( radians( i * angle ) ) * r*4.3;
-      vertex( this.topPoint.x, this.topPoint.y,this.topPoint.z);
+      vertex( this.topPoint.x, this.topPoint.y, this.topPoint.z);
       vertex( this.pos.x+x, this.pos.y+y, this.pos.z+(treeHeight*age)/4);
     }
     endShape(CLOSE);
+    noLights();
   }
 }

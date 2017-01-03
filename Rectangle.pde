@@ -2,7 +2,7 @@ class Rectangle implements Shape {
   float x, y, z;
   int wid, len;
   color fill, stroke;
-  float height;
+  float buildingHeight;
   PImage texture;
   float[] terrainHeights = new float[4];
   Rectangle(float x, float y, float z, int wid, int len, PImage text) {
@@ -18,36 +18,36 @@ class Rectangle implements Shape {
     this.fill = fill;
     this.stroke = stroke;
     this.texture = texture;    
-    this.terrainHeights[0] = cMap.getHeightAt(x,y);
-    this.terrainHeights[1] = cMap.getHeightAt(x,y+len);
-    this.terrainHeights[2] = cMap.getHeightAt(x+wid,y);
-    this.terrainHeights[3] = cMap.getHeightAt(x+wid,y+len);
+    this.terrainHeights[0] = cMap.getHeightAt(x, y);
+    this.terrainHeights[1] = cMap.getHeightAt(x, y+len);
+    this.terrainHeights[2] = cMap.getHeightAt(x+wid, y);
+    this.terrainHeights[3] = cMap.getHeightAt(x+wid, y+len);
     this.z = max(terrainHeights);
-  //this.z = max(new float[]{cMap.getHeightAt(x,y),cMap.getHeightAt(x+wid,y),cMap.getHeightAt(x,y+len),cMap.getHeightAt(x+wid,y+len)});
   }
-  void display() {
+  void display2D() {
     fill(fill);
-    stroke(stroke);
-    rect(x, y, wid, len);
+    //stroke(stroke);
+   // println(x, map(x, 0, GRID_WIDTH, 0, width), width*(this.wid/(float)GRID_WIDTH));
+    rect(map(x, 0, GRID_WIDTH-CELL_SCALE, 0, width), map(y, 0, GRID_HEIGHT-CELL_SCALE, 0, height), (float)width*(this.wid/((float)GRID_WIDTH-(float)CELL_SCALE)), (float)height*(this.len/((float)GRID_HEIGHT-(float)CELL_SCALE)));
   }
-  void display3d() {    
+  void display() {    
     // make top
     fill(fill);
     //stroke(stroke);
-    noStroke();
+   // noStroke();
     beginShape();
-    vertex(x, y, this.z+this.height);
-    vertex(x, y+len, this.z+this.height);
-    vertex(x+wid, y+len, this.z+this.height);
-    vertex(x+wid, y, this.z+this.height);
+    vertex(x, y, this.z+this.buildingHeight);
+    vertex(x, y+len, this.z+this.buildingHeight);
+    vertex(x+wid, y+len, this.z+this.buildingHeight);
+    vertex(x+wid, y, this.z+this.buildingHeight);
     endShape();
 
     // make front
     beginShape();
     texture(texture);
     vertex(x, y, this.z, 0, 0);
-    vertex(x, y, this.z+this.height, 0, 3);
-    vertex(x+wid, y, this.z+this.height, 3, 3);
+    vertex(x, y, this.z+this.buildingHeight, 0, 3);
+    vertex(x+wid, y, this.z+this.buildingHeight, 3, 3);
     vertex(x+wid, y, this.z, 3, 0);
     endShape();
 
@@ -55,8 +55,8 @@ class Rectangle implements Shape {
     beginShape();
     texture(texture);
     vertex(x+wid, y+len, this.z, 0, 0);
-    vertex(x+wid, y+len, this.z+this.height, 0, 3);
-    vertex(x, y+len, this.z+this.height, 3, 3);
+    vertex(x+wid, y+len, this.z+this.buildingHeight, 0, 3);
+    vertex(x, y+len, this.z+this.buildingHeight, 3, 3);
     vertex(x, y+len, this.z, 3, 0);
     endShape();
 
@@ -64,8 +64,8 @@ class Rectangle implements Shape {
     beginShape();
     texture(texture);
     vertex(x, y, this.z, 0, 0);
-    vertex(x, y, this.z+this.height, 0, 3);
-    vertex(x, y+len, this.z+this.height, 3, 3);
+    vertex(x, y, this.z+this.buildingHeight, 0, 3);
+    vertex(x, y+len, this.z+this.buildingHeight, 3, 3);
     vertex(x, y+len, this.z, 3, 0);
     endShape();
 
@@ -73,8 +73,8 @@ class Rectangle implements Shape {
     beginShape();
     texture(texture);
     vertex(x+wid, y, this.z, 0, 0);
-    vertex(x+wid, y, this.z+this.height, 0, 3);
-    vertex(x+wid, y+len, this.z+this.height, 3, 3);
+    vertex(x+wid, y, this.z+this.buildingHeight, 0, 3);
+    vertex(x+wid, y+len, this.z+this.buildingHeight, 3, 3);
     vertex(x+wid, y+len, this.z, 3, 0);
     endShape();
 
@@ -83,7 +83,7 @@ class Rectangle implements Shape {
 
   void drawBase() {
     fill(100);
-     // make front
+    // make front
     beginShape();
     vertex(x, y, this.z);
     vertex(x, y, terrainHeights[0]);
@@ -138,9 +138,9 @@ class Rectangle implements Shape {
   }
 
   float getHeight() {
-    return this.height;
+    return this.buildingHeight;
   }
   void setHeight(float h) {
-    this.height = h;
+    this.buildingHeight = h;
   }
 }
