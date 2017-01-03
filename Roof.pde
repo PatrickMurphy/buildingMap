@@ -6,10 +6,10 @@ class Roof extends Rectangle implements Shape {
     this.height = r.getHeight()/5;
   }
   
-  Roof(int x, int y, int z, int wid, int len, PImage text) {
+  Roof(float x, float y, float z, int wid, int len, PImage text) {
     this(x, y, z, wid, len, color(25), color(55), text);
   }
-  Roof(int x, int y, int z, int wid, int len, color fill, color stroke, PImage texture) {
+  Roof(float x, float y, float z, int wid, int len, color fill, color stroke, PImage texture) {
     super(x, y, z, wid, len, fill, stroke, texture);
   }
 

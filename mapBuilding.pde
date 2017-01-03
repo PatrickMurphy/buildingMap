@@ -2,6 +2,7 @@ import peasy.*;
 import peasy.org.apache.commons.math.*;
 import peasy.org.apache.commons.math.geometry.*;
 
+
 PeasyCam camera;
 PVector lookAtPoint;
 
@@ -11,8 +12,8 @@ final int GRID_WIDTH = 30*OVERALL_SCALE;
 final int GRID_HEIGHT = 30*OVERALL_SCALE;
 
 // Numbers of Columns and Rows for cell grid, (over all width / width of one cell)
-final int GRID_COLUMNS = GRID_WIDTH/CELL_SCALE;
-final int GRID_ROWS = GRID_HEIGHT/CELL_SCALE;
+final int GRID_COLUMNS = (GRID_WIDTH/CELL_SCALE);
+final int GRID_ROWS = (GRID_HEIGHT/CELL_SCALE);
 
 // Settings
 final int MAX_BUILDINGS = 900;
@@ -34,6 +35,9 @@ String loadStep = "Initialize";
 
 // collection of trees to display
 Forest forest;
+City city;
+
+ArrayList<RandomBuilding> buildings = new ArrayList<RandomBuilding>();
 
 // Collection of CompiledCells that store cell position, cell height, terrain type and more
 CompiledMap cMap;
@@ -64,6 +68,9 @@ void startLoading() {
 
   cMap = new CompiledMap(OVERALL_SCALE, GRID_COLUMNS, GRID_ROWS); // random terrain and buildings 
   forest = new Forest(MAX_TREES); // create up to maxTrees # of random trees
+  city = new City();
+
+  loading = false;
 }
 
 void preLoadTextures() {
@@ -85,10 +92,13 @@ void draw() {
 
       // draw the trees
       forest.display();
+      
+      // draw the buildings
+      city.display();
+
 
       if (showVisAid) {
         // draw a ray up and down at camera look point
-
         CompiledCell lookCell = cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y);
         stroke(255, 0, 0); // red
         line(lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 0, lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 1000);
@@ -159,7 +169,6 @@ void keyPressed() {
   camera.lookAt(cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.x+CELL_SCALE/2, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.y+CELL_SCALE/2, cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y).v1.z);
 }
 
-// extension function for my own vector class // not used yet
-void vertex(Vector3 v) {
+void vertex(PVector v) {
   vertex(v.x, v.y, v.z);
 }

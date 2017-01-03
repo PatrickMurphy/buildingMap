@@ -1,25 +1,25 @@
-class Tree {
-  Vector3 pos;
+class Tree implements TileObject {
+  PVector pos;
   float age;
   float treeAngle;
   int treeHeight = 75;
-  Vector3 topPoint;
+  PVector topPoint;
 
   Tree(int x, int y, int z) {
     this(x, y, z, random(.25, 1));
   }
 
   Tree(int x, int y, float z, float age) {
-    this(new Vector3(x, y, z), age);
+    this(new PVector(x, y, z), age);
   }
-  Tree(Vector3 v) {
+  Tree(PVector v) {
     this(v, random(.25, 1));
   }
-  Tree(Vector3 v, float age) {
+  Tree(PVector v, float age) {
     this.age = age;
     this.pos = v;
     this.treeAngle = PI/((int) random(1, 6));
-    this.topPoint = new Vector3(this.pos.x, this.pos.y, this.pos.z+(treeHeight*this.age));
+    this.topPoint = new PVector(this.pos.x, this.pos.y, this.pos.z+(treeHeight*this.age));
   }
   
   void update(){
@@ -28,6 +28,10 @@ class Tree {
     float strength = map((second()+this.pos.y)%100,0,100,-1,1);
     this.topPoint.x = this.pos.x + ((2*this.age * cos(radians(angle)))*strength);
     this.topPoint.y = this.pos.y + ((2*this.age * sin(radians(angle)))*strength);
+  }
+  
+  PVector getPosition(){
+    return this.pos;
   }
   
   void display() {

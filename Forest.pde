@@ -16,9 +16,9 @@ class Forest {
       CompiledCell testCell = cMap.getCell(randX,randY);
       
       if(testCell.id >= 2 && testCell.id <= 5 && !testCell.isForest() && (!testCell.isCity())){
-        Vector3 tree_pos = new Vector3(CELL_SCALE/2,CELL_SCALE/2,0).add(testCell.v1);
+        PVector tree_pos = new PVector(CELL_SCALE/2,CELL_SCALE/2,0).add(testCell.v1);
         tree_pos.z = testCell.getHeightAt(CELL_SCALE/2,CELL_SCALE/2);
-        this.addTree(new Tree(tree_pos));
+        this.addTree(new Tree(tree_pos, map(testCell.getPopulation(),27,100,1,.1)));
         testCell.setForest();
       }
     }

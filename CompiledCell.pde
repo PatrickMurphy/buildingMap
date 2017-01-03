@@ -1,7 +1,8 @@
 class CompiledCell {
   float cellPopulation;
   color cellColor;
-  Vector3 v1, v2, v3, v4;
+  PVector v1, v2, v3, v4;
+  float maxHeight;
   boolean cityTile = false;
   boolean hasBuilding = false;
   boolean forestTile = false;
@@ -9,35 +10,37 @@ class CompiledCell {
 
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
 
-  CompiledCell(Vector3 cv1, Vector3 cv2, Vector3 cv3, Vector3 cv4, int x, int y, float cPop) {
+  CompiledCell(PVector cv1, PVector cv2, PVector cv3, PVector cv4, int x, int y, float cPop) {
     this.v1 = cv1;
     this.v2 = cv2;
     this.v3 = cv3;
     this.v4 = cv4;
+    this.maxHeight = max(new float[]{v1.z,v2.z,v3.z,v4.z});
     this.x = x;
     this.y = y;
     this.cellPopulation = cPop;
     this.getTerrain();
+
   }
 
   void drawCell() {
     fill(getColor());
-    vertex(getVector1().getX(), getVector1().getY(), getVector1().getZ());
-    vertex(getVector2().getX(), getVector2().getY(), getVector2().getZ());
-    vertex(getVector3().getX(), getVector3().getY(), getVector3().getZ());
-    vertex(getVector4().getX(), getVector4().getY(), getVector4().getZ());
+    vertex(getVector1());
+    vertex(getVector2());
+    vertex(getVector3());
+    vertex(getVector4());
   }
 
-  Vector3 getVector1() {
+  PVector getVector1() {
     return this.v1;
   }
-  Vector3 getVector2() {
+  PVector getVector2() {
     return this.v2;
   }
-  Vector3 getVector3() {
+  PVector getVector3() {
     return this.v3;
   }
-  Vector3 getVector4() {
+  PVector getVector4() {
     return this.v4;
   }
 
@@ -66,17 +69,21 @@ class CompiledCell {
   boolean isForest() {
     return forestTile;
   }
+  
+  float getMaxHeight(){
+    return maxHeight;
+  }
 
   float getHeightAt(int x, int y) {
     //http://keisan.casio.com/exec/system/1223596129
-    PVector A = v1.convert();
+    PVector A = v1.copy();
     
     // if in the bottom triangle use other plane
     if(y-((CELL_SCALE-1)-x) > 0){
-      A = v4.convert();
+      A = v4.copy();
     }
-    PVector B = v3.convert();
-    PVector C = v2.convert();
+    PVector B = v3.copy();
+    PVector C = v2.copy();
 
     PVector AB = B.copy().sub(A);
     PVector AC = C.copy().sub(A);
@@ -93,7 +100,7 @@ class CompiledCell {
   }
 
   float getSlope() {
-    return degrees(PVector.angleBetween(this.v1.convert(), this.v2.convert()));
+    return degrees(PVector.angleBetween(this.v1, this.v2));
   }
 
   float getPopulation() {

@@ -1,4 +1,4 @@
-class RandomBuilding {
+class RandomBuilding implements TileObject{
   int x, y, z;
   int wid, len;
   int centerX, centerY;
@@ -11,7 +11,7 @@ class RandomBuilding {
 
   ArrayList<Shape> shapes = new ArrayList<Shape>();
 
-  RandomBuilding(Vector3 v, int SquareLength, float pop) {
+  RandomBuilding(PVector v, int SquareLength, float pop) {
     this((int)v.x, (int)v.y, (int)v.z, SquareLength, SquareLength, pop);
   }
 
@@ -33,7 +33,7 @@ class RandomBuilding {
     this.centerX = wid/2;
     this.centerY = len/2;
     this.influence = influence;
-    this.shapeCount = (int)random(2, 5);
+    this.shapeCount = (int)random(2, 4);
     this.maxHeight = (int)random(wid, wid*map(this.pop, 0, 100, 1, 5));
     this.texture = building_textures[(int)random(0, 100)%(building_textures.length)]; // random texture
     
@@ -78,6 +78,10 @@ class RandomBuilding {
         }
       }
     }
+  }
+
+  PVector getPosition(){
+    return new PVector(x,y,z);
   }
 
   void display() {
