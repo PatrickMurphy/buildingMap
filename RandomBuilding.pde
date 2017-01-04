@@ -51,7 +51,7 @@ class RandomBuilding implements TileObject {
     if (shapes.size() < this.shapeCount) {
       // try and place another shape
       int testX = (int)random(this.padding, wid-this.padding);
-      int testY = (int)random(this.padding, len-this.padding);
+      int testY = (int)random(-this.padding, len-this.padding);
 
       Shape r1;
 

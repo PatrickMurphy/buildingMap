@@ -8,7 +8,8 @@ class CompiledCell implements Comparable<CompiledCell> {
   boolean forestTile = false;
   boolean roadTile = false;
   int x, y;
-  
+  PImage texture;
+
   ArrayList<TileObject> tileObjects;
 
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
@@ -23,30 +24,34 @@ class CompiledCell implements Comparable<CompiledCell> {
     this.x = x;
     this.y = y;
     this.cellPopulation = cPop;
-    
+
     tileObjects = new ArrayList<TileObject>();
-    
+
     this.getTerrain();
+    texture = terrain_textures[this.id];
   }
 
   void drawCell() {
-    fill(getColor());
-    vertex(getVector1());
-    vertex(getVector2());
-    vertex(getVector3());
-    vertex(getVector4());
+    //fill(getColor());
+    vertex(getVector1().x, getVector1().y, getVector1().z, this.x/float(GRID_COLUMNS-1), 0);
+    vertex(getVector2().x, getVector2().y, getVector2().z, this.x/float(GRID_COLUMNS-1), 1);
+
+    if (x == GRID_COLUMNS-2) {
+      vertex(getVector3().x, getVector3().y, getVector3().z, 1, 0);
+      vertex(getVector4().x, getVector4().y, getVector4().z, 1, 1);
+    }
   }
-  
+
   void drawCellDetail() {
     drawObjects();
     if (hasBuilding) {
       drawRoads();
     }
   }
-  
-  void drawObjects(){
+
+  void drawObjects() {
     // draw trees and buildings
-    for(TileObject o : this.tileObjects){
+    for (TileObject o : this.tileObjects) {
       o.display();
     }
   }
@@ -95,8 +100,8 @@ class CompiledCell implements Comparable<CompiledCell> {
   boolean isCity() {
     return cityTile;
   }
-  
-  void addBuilding(RandomBuilding b){
+
+  void addBuilding(RandomBuilding b) {
     this.setHasBuilding();
     tileObjects.add((TileObject)b);
   }
@@ -111,8 +116,8 @@ class CompiledCell implements Comparable<CompiledCell> {
   boolean hasBuilding() {
     return this.hasBuilding;
   }
-  
-  void addTree(Tree t){
+
+  void addTree(Tree t) {
     this.setForest();
     tileObjects.add((TileObject)t);
   }
@@ -260,7 +265,7 @@ class CompiledCell implements Comparable<CompiledCell> {
       tempcolor = color(map(heightValue, 0, heightScale, 0, 255));
       this.cellPopulation = 0;
     }
-
+   
     this.cellColor = tempcolor;
   }
 }

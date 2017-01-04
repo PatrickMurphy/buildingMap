@@ -4,7 +4,7 @@ class CompiledMap {
   int hSeed;
   int pSeed;
   int heightScale;
-
+  PImage[] row_textures;
   NoiseMap hMap;
   NoiseMap pMap;
 
@@ -33,6 +33,7 @@ class CompiledMap {
     this.popFilter = mapPopFilter;
     compiledCells = new CompiledCell[cols-1][rows-1];
     this.setupMap();
+    this.generateRowTextures();
   }
 
   CompiledCell getCell(int x, int y) {
@@ -92,6 +93,18 @@ class CompiledMap {
     return this.getCell(tempx, tempy).getHeightAt(x-(tempx*CELL_SCALE), y-(tempy*CELL_SCALE));
   }
 
+  void generateRowTextures() {
+    row_textures = new PImage[this.rows-1];
+    for (int y = 0; y< this.rows-1; y++) {
+      PImage temp = createImage(CELL_SCALE*(this.cols-1), CELL_SCALE, RGB);
+      for (int x = 0; x< this.cols-1; x++) {
+        int isCity = compiledCells[x][y].isCity() ? 1 : 0;
+        temp.set(x*CELL_SCALE, 0, terrain_textures[compiledCells[x][y].id + (7*isCity)]);
+      }
+      this.row_textures[y] = temp;
+    }
+  }
+
   void display2D() {
     for (int y = 0; y<rows-1; y++) {
       for (int x = 0; x<cols-1; x++) {
@@ -109,14 +122,16 @@ class CompiledMap {
   }
 
   void drawMap() {
-   //stroke(60);
+    //stroke(60);
     for (int y = 0; y<rows-1; y++) {
+      //fill(lerpColor(0,255,y/float(rows-1)));
       beginShape(TRIANGLE_STRIP);
+      texture(this.row_textures[y]);
       for (int x = 0; x<cols-1; x++) {
         compiledCells[x][y].drawCell();
       }
       endShape();
     }
-   // noStroke();
+    //noStroke();
   }
 }

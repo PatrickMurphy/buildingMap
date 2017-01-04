@@ -22,13 +22,16 @@ final int MAP_HEIGHT_SCALE = 20*CELL_SCALE;
 
 final boolean FULLSCREEN = false;
 
+PImage testTexture = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65))).getTexture();
+
 boolean displayCity = false; // colors terrain with grey where the population map says we should have a city
 Boolean showVisAid = true; // default state, toggled with "q"
 int mapPopFilter = 15; // this will effect how much of the map is categorized as "city"
 // End settings
 
 // state variable for what we are showing
-int displayMode = 0; // 0 = normal, 1 = 2D map, 2 = heightMap2d, 3 = pop map 2d
+int displayMode = 0; // 0 = normal, 1 = 2D map, 2 = heightMap2d, 3 = pop map 2d, 4 = texture
+int displayModeCount = 5;
 
 // Values for loading screen
 boolean loading = true;
@@ -39,18 +42,15 @@ String loadStep = "Initialize";
 Forest forest;
 City city;
 
-ArrayList<RandomBuilding> buildings = new ArrayList<RandomBuilding>();
-
 // Collection of CompiledCells that store cell position, cell height, terrain type and more
 CompiledMap cMap;
 
 // array of pre loaded textures
 PImage[] building_textures; 
+PImage[] terrain_textures;
 
 void setup() {
   size(800, 800, P3D);
-
-
   // start other thread for generating map so loading screen is displayed
   thread("startLoading"); // string of function name below
 }
@@ -87,6 +87,21 @@ void preLoadTextures() {
   for (int i = 0; i<11; i++) {
     building_textures[i] = loadImage("building_office"+(i+3)+".png");
   }
+  terrain_textures = new PImage[13];
+  terrain_textures[0] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(30, 144, 255))).getTexture();
+  terrain_textures[1] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(222, 184, 135))).getTexture();
+  terrain_textures[2] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65))).getTexture();
+  terrain_textures[3] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(85, 165, 94))).getTexture();
+  terrain_textures[4] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(6, 109, 51))).getTexture();
+  terrain_textures[5] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(155, 105, 12))).getTexture();
+  terrain_textures[6] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(124, 83, 7))).getTexture();
+  terrain_textures[7] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(240))).getTexture();
+  
+  terrain_textures[8] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(222, 184, 135))).getTexture(true);
+  terrain_textures[9] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65))).getTexture(true);
+  terrain_textures[10] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(85, 165, 94))).getTexture(true);
+  terrain_textures[11] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(6, 109, 51))).getTexture(true);
+  terrain_textures[12] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(155, 105, 12))).getTexture(true);
 }
 
 // Main Draw loop, called every frame
@@ -119,6 +134,14 @@ void draw() {
       } else if (displayMode == 3) {
         // display population map 2D noise values
         cMap.pMap.display2D(color(15, 15, 250), color(250, 15, 15));
+      } else if (displayMode == 4) {
+        background(220);
+        for(int i = 0; i < terrain_textures.length;i++){
+          image(terrain_textures[i], 0, i*50);
+          image(terrain_textures[i], 50, i*50);
+        }       
+        image(cMap.row_textures[2],250,250);
+
       }
       camera.endHUD();
     }
@@ -164,7 +187,7 @@ void keyPressed() {
 
   if (key == 'e') {
     // toggle display mode
-    displayMode = (displayMode+1)%4;
+    displayMode = (displayMode+1)%displayModeCount;
   }
 
   if (key == 'q') {
