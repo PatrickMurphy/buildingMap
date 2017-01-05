@@ -30,7 +30,7 @@ There are some parameters to play with in `mapBuilding.pde`:
 	* Optimize Random building geometry (Don't draw hidden stuff)
 	* add more building type variety
 2. City
-	* Draw Roads
+	* Draw main Roads
 	* cars?
 3. Environment
 	* Weather

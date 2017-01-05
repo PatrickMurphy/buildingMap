@@ -11,7 +11,7 @@ class City {
     loadStep = "Generate Buildings";
     loadPCT = 0;
     originSet = new TreeSet<CompiledCell>();
-    cellularAutomata();
+    //cellularAutomata();
     generateRandomBuildings();
   }
 
@@ -56,19 +56,26 @@ class City {
 
   void generateRandomBuildings() {
     CompiledCell  testCell;
-    while (buildAttempts > 0 && buildingsPlaced < MAX_BUILDINGS) {
-      buildAttempts--;
-      testCell = cMap.getCell((int)random(0, GRID_COLUMNS-1), (int)random(0, GRID_ROWS-1));
+    for (int y = 0; y<GRID_ROWS-1; y++) {
+      for (int x = 0; x<GRID_COLUMNS-1; x++) {
+        testCell = cMap.getCell(x,y);
 
-      // max 400 buildings, don't place on steep hills, population density over 30
-      if (testCell.isCity() && !testCell.isRoad() && !testCell.hasBuilding() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < GRID_COLUMNS-1) { 
-        buildingsPlaced++;
-        loadPCT = buildingsPlaced/(float)MAX_BUILDINGS;
-        //testCell.setHasBuilding();
-        testCell.addBuilding(new RandomBuilding((int)testCell.v1.x, (int)testCell.v1.y, (int)testCell.getMaxHeight(), CELL_SCALE, testCell.getPopulation()));
+        if (testCell.isCity()) {
+          testCell.texture = terrain_textures[testCell.id].getTexture(new boolean[]{true, true, true, true});
+        } else {
+          testCell.texture = terrain_textures[testCell.id].getTexture(testCell.getNeighbors());
+        }
+        // max 400 buildings, don't place on steep hills, population density over 30
+        if (testCell.isCity() && !testCell.isRoad() && !testCell.hasBuilding() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < GRID_COLUMNS-1) { 
+          buildingsPlaced++;
+          loadPCT = ((y*(GRID_ROWS-1))+x)/(GRID_ROWS-1)*(GRID_COLUMNS-1);
+          //testCell.setHasBuilding();
+          testCell.addBuilding(new RandomBuilding((int)testCell.v1.x, (int)testCell.v1.y, (int)testCell.getMaxHeight(), CELL_SCALE, testCell.getPopulation()));
+        }
       }
     }
     println("buildings "+ buildingsPlaced);
+    cMap.generateRowTextures();
   }
 
   void addRoad(CompiledCell c1, CompiledCell c2) {

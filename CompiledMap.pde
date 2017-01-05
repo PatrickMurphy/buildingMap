@@ -99,7 +99,7 @@ class CompiledMap {
       PImage temp = createImage(CELL_SCALE*(this.cols-1), CELL_SCALE, RGB);
       for (int x = 0; x< this.cols-1; x++) {
         int isCity = compiledCells[x][y].isCity() ? 1 : 0;
-        temp.set(x*CELL_SCALE, 0, terrain_textures[compiledCells[x][y].id + (7*isCity)]);
+        temp.set(x*CELL_SCALE, 0, compiledCells[x][y].texture);
       }
       this.row_textures[y] = temp;
     }
@@ -122,7 +122,7 @@ class CompiledMap {
   }
 
   void drawMap() {
-    //stroke(60);
+   // stroke(60);
     for (int y = 0; y<rows-1; y++) {
       //fill(lerpColor(0,255,y/float(rows-1)));
       beginShape(TRIANGLE_STRIP);

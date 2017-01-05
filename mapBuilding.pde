@@ -1,4 +1,4 @@
-import peasy.*;
+import peasy.*; //<>//
 import peasy.org.apache.commons.math.*;
 import peasy.org.apache.commons.math.geometry.*;
 
@@ -47,7 +47,7 @@ CompiledMap cMap;
 
 // array of pre loaded textures
 PImage[] building_textures; 
-PImage[] terrain_textures;
+TextureGenerator[] terrain_textures;
 
 void setup() {
   size(800, 800, P3D);
@@ -65,8 +65,8 @@ void startLoading() {
   println(GRID_COLUMNS, GRID_ROWS, GRID_COLUMNS*GRID_ROWS); // print the grid width and length, and the total number of cells
 
   // texture mode for buildings
+ // textureWrap(REPEAT);
   textureMode(NORMAL);
-  textureWrap(REPEAT);
   preLoadTextures();
 
 
@@ -87,21 +87,15 @@ void preLoadTextures() {
   for (int i = 0; i<11; i++) {
     building_textures[i] = loadImage("building_office"+(i+3)+".png");
   }
-  terrain_textures = new PImage[13];
-  terrain_textures[0] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(30, 144, 255))).getTexture();
-  terrain_textures[1] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(222, 184, 135))).getTexture();
-  terrain_textures[2] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65))).getTexture();
-  terrain_textures[3] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(85, 165, 94))).getTexture();
-  terrain_textures[4] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(6, 109, 51))).getTexture();
-  terrain_textures[5] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(155, 105, 12))).getTexture();
-  terrain_textures[6] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(124, 83, 7))).getTexture();
-  terrain_textures[7] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(240))).getTexture();
-  
-  terrain_textures[8] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(222, 184, 135))).getTexture(true);
-  terrain_textures[9] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65))).getTexture(true);
-  terrain_textures[10] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(85, 165, 94))).getTexture(true);
-  terrain_textures[11] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(6, 109, 51))).getTexture(true);
-  terrain_textures[12] = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(155, 105, 12))).getTexture(true);
+  terrain_textures = new TextureGenerator[13];
+  terrain_textures[0] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(30, 144, 255));
+  terrain_textures[1] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(222, 184, 135));
+  terrain_textures[2] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65));
+  terrain_textures[3] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(85, 165, 94));
+  terrain_textures[4] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(6, 109, 51));
+  terrain_textures[5] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(155, 105, 12));
+  terrain_textures[6] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(124, 83, 7));
+  terrain_textures[7] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(240));
 }
 
 // Main Draw loop, called every frame
@@ -136,12 +130,26 @@ void draw() {
         cMap.pMap.display2D(color(15, 15, 250), color(250, 15, 15));
       } else if (displayMode == 4) {
         background(220);
-        for(int i = 0; i < terrain_textures.length;i++){
-          image(terrain_textures[i], 0, i*50);
-          image(terrain_textures[i], 50, i*50);
-        }       
-        image(cMap.row_textures[2],250,250);
-
+        //for(int i = 0; i < terrain_textures.length;i++){
+        //image(terrain_textures[i].getTexture(), 0, i*50);
+        // image(terrain_textures[i].getTexture(), 50, i*50);
+        // }       
+        image(cMap.row_textures[0], 0, 0);
+        image(cMap.row_textures[1], 0, 50);
+        image(cMap.row_textures[2], 0, 100);
+        image(cMap.row_textures[3], 0, 150);
+        image(cMap.row_textures[4], 0, 200);
+        image(cMap.row_textures[5], 0, 250);
+        image(cMap.row_textures[6], 0, 300);
+        image(cMap.row_textures[7], 0, 350);
+        image(cMap.row_textures[8], 0, 400);
+        image(cMap.row_textures[9], 0, 450);
+        image(cMap.row_textures[10], 0, 500);
+        image(cMap.row_textures[11], 0, 550);
+        image(cMap.row_textures[12], 0, 600);
+        image(cMap.row_textures[13], 0, 650);
+        image(cMap.row_textures[14], 0, 700);
+        image(cMap.row_textures[15], 0, 750);
       }
       camera.endHUD();
     }
@@ -155,6 +163,7 @@ void draw() {
 void drawLoading() {
   // display loading screen
   camera.beginHUD();
+  background(0);
   fill(255, 0, 0);
   text("LOADING... ", width/2, height/2);
   text("Step: " + loadStep  +" "+ (loadPCT*100) + "%", width/2, (height/2)+26);

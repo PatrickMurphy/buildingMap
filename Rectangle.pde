@@ -27,14 +27,13 @@ class Rectangle implements Shape {
   void display2D() {
     fill(fill);
     //stroke(stroke);
-   // println(x, map(x, 0, GRID_WIDTH, 0, width), width*(this.wid/(float)GRID_WIDTH));
+    // println(x, map(x, 0, GRID_WIDTH, 0, width), width*(this.wid/(float)GRID_WIDTH));
     rect(map(x, 0, GRID_WIDTH-CELL_SCALE, 0, width), map(y, 0, GRID_HEIGHT-CELL_SCALE, 0, height), (float)width*(this.wid/((float)GRID_WIDTH-(float)CELL_SCALE)), (float)height*(this.len/((float)GRID_HEIGHT-(float)CELL_SCALE)));
   }
   void display() {    
     // make top
     fill(fill);
     //stroke(stroke);
-   // noStroke();
     beginShape();
     vertex(x, y, this.z+this.buildingHeight);
     vertex(x, y+len, this.z+this.buildingHeight);
@@ -46,37 +45,38 @@ class Rectangle implements Shape {
     beginShape();
     texture(texture);
     vertex(x, y, this.z, 0, 0);
-    vertex(x, y, this.z+this.buildingHeight, 0, 3);
-    vertex(x+wid, y, this.z+this.buildingHeight, 3, 3);
-    vertex(x+wid, y, this.z, 3, 0);
+    vertex(x, y, this.z+this.buildingHeight, 0, 1);
+    vertex(x+wid, y, this.z+this.buildingHeight, 1, 1);
+    vertex(x+wid, y, this.z, 1, 0);
     endShape();
 
     // make back
     beginShape();
     texture(texture);
     vertex(x+wid, y+len, this.z, 0, 0);
-    vertex(x+wid, y+len, this.z+this.buildingHeight, 0, 3);
-    vertex(x, y+len, this.z+this.buildingHeight, 3, 3);
-    vertex(x, y+len, this.z, 3, 0);
+    vertex(x+wid, y+len, this.z+this.buildingHeight, 0, 1);
+    vertex(x, y+len, this.z+this.buildingHeight, 1, 1);
+    vertex(x, y+len, this.z, 1, 0);
     endShape();
 
     // make right
     beginShape();
     texture(texture);
     vertex(x, y, this.z, 0, 0);
-    vertex(x, y, this.z+this.buildingHeight, 0, 3);
-    vertex(x, y+len, this.z+this.buildingHeight, 3, 3);
-    vertex(x, y+len, this.z, 3, 0);
+    vertex(x, y, this.z+this.buildingHeight, 0, 1);
+    vertex(x, y+len, this.z+this.buildingHeight, 1, 1);
+    vertex(x, y+len, this.z, 1, 0);
     endShape();
 
     // make left
     beginShape();
     texture(texture);
     vertex(x+wid, y, this.z, 0, 0);
-    vertex(x+wid, y, this.z+this.buildingHeight, 0, 3);
-    vertex(x+wid, y+len, this.z+this.buildingHeight, 3, 3);
-    vertex(x+wid, y+len, this.z, 3, 0);
+    vertex(x+wid, y, this.z+this.buildingHeight, 0, 1);
+    vertex(x+wid, y+len, this.z+this.buildingHeight, 1, 1);
+    vertex(x+wid, y+len, this.z, 1, 0);
     endShape();
+
 
     drawBase();
   }

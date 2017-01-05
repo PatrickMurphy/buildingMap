@@ -30,7 +30,7 @@ class RandomBuilding implements TileObject {
     this.wid = wid;
     this.len = len;
     this.pop = pop;
-    this.padding = 10;
+    this.padding = 6;
     this.centerX = wid/2;
     this.centerY = len/2;
     this.influence = influence;
@@ -58,9 +58,9 @@ class RandomBuilding implements TileObject {
       if (this.pop >= 50) {
         // sky scaper
         if (random(0, 100)>60) {
-          r1 = new Circle(testX+x, testY+y, this.z, (int)random(min(testX, wid-testX)), (int)random(min(testY, len-testY)), texture);
+          r1 = new Circle(testX+x, testY+y, this.z, (int)random(min(testX, (wid-this.padding)-testX)), (int)random(min(testY,(len-this.padding)-testY)), texture);
         } else {
-          r1 = new Rectangle(testX+x, testY+y, this.z, (int)random(wid/4, wid-testX), (int)random(len/4, len-testY), texture);
+          r1 = new Rectangle(testX+x, testY+y, this.z, (int)random(wid/4, (wid-this.padding)-testX), (int)random(len/4, (len-this.padding)-testY), texture);
         }
 
         if (r1.containsPoint(centerX+x, centerY+y)) {

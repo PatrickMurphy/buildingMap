@@ -28,25 +28,45 @@ class CompiledCell implements Comparable<CompiledCell> {
     tileObjects = new ArrayList<TileObject>();
 
     this.getTerrain();
-    texture = terrain_textures[this.id];
+    texture = terrain_textures[this.id].getTexture();
   }
 
   void drawCell() {
     //fill(getColor());
-    vertex(getVector1().x, getVector1().y, getVector1().z, this.x/float(GRID_COLUMNS-1), 0);
     vertex(getVector2().x, getVector2().y, getVector2().z, this.x/float(GRID_COLUMNS-1), 1);
-
+    vertex(getVector1().x, getVector1().y, getVector1().z, this.x/float(GRID_COLUMNS-1), 0);
     if (x == GRID_COLUMNS-2) {
-      vertex(getVector3().x, getVector3().y, getVector3().z, 1, 0);
       vertex(getVector4().x, getVector4().y, getVector4().z, 1, 1);
+      vertex(getVector3().x, getVector3().y, getVector3().z, 1, 0);
     }
+  }
+
+  boolean[] getNeighbors() {
+    CompiledCell north = cMap.getCell(x, y-1);
+    CompiledCell south = cMap.getCell(x, y+1);
+    CompiledCell east = cMap.getCell(x+1, y);
+    CompiledCell west = cMap.getCell(x-1, y);
+
+    boolean[] ret_values = new boolean[]{false, false, false, false};
+
+    if (west != null && west .isCity()) {
+      ret_values[0] = true;
+    }
+    if (north != null && north.isCity()) {
+      ret_values[1] = true;
+    }
+    if (east != null && east.isCity()) {
+      ret_values[2] = true;
+    }
+    if (south != null && south.isCity()) {
+      ret_values[3] = true;
+    }
+
+    return ret_values;
   }
 
   void drawCellDetail() {
     drawObjects();
-    if (hasBuilding) {
-      drawRoads();
-    }
   }
 
   void drawObjects() {
@@ -61,9 +81,6 @@ class CompiledCell implements Comparable<CompiledCell> {
     int ywid = height/GRID_ROWS+1;
     fill(this.cellColor);
     rect(x*xwid, y*ywid, x+xwid, y+ywid);
-  }
-
-  void drawRoads() {
   }
 
   int compareTo(CompiledCell c) {
@@ -265,7 +282,7 @@ class CompiledCell implements Comparable<CompiledCell> {
       tempcolor = color(map(heightValue, 0, heightScale, 0, 255));
       this.cellPopulation = 0;
     }
-   
+
     this.cellColor = tempcolor;
   }
 }
