@@ -9,7 +9,7 @@ class CompiledCell implements Comparable<CompiledCell> {
   boolean roadTile = false;
   int x, y;
   PImage texture;
-
+  boolean[] cityNeighbors;
   ArrayList<TileObject> tileObjects;
 
   int id; // 0:water, 1:beach, 2:lowlands, 3:hills, 4:foothills,5:mountainstart, 6:mountainmid, 7:mountainpeak
@@ -25,6 +25,7 @@ class CompiledCell implements Comparable<CompiledCell> {
     this.y = y;
     this.cellPopulation = cPop;
 
+    this.cityNeighbors = new boolean[4];
     tileObjects = new ArrayList<TileObject>();
 
     this.getTerrain();
@@ -33,15 +34,20 @@ class CompiledCell implements Comparable<CompiledCell> {
 
   void drawCell() {
     //fill(getColor());
-    vertex(getVector2().x, getVector2().y, getVector2().z, this.x/float(GRID_COLUMNS-1), 1);
     vertex(getVector1().x, getVector1().y, getVector1().z, this.x/float(GRID_COLUMNS-1), 0);
+    vertex(getVector2().x, getVector2().y, getVector2().z, this.x/float(GRID_COLUMNS-1), 1);
     if (x == GRID_COLUMNS-2) {
-      vertex(getVector4().x, getVector4().y, getVector4().z, 1, 1);
       vertex(getVector3().x, getVector3().y, getVector3().z, 1, 0);
+      vertex(getVector4().x, getVector4().y, getVector4().z, 1, 1);
     }
   }
 
   boolean[] getNeighbors() {
+    return this.cityNeighbors;
+  }
+
+  void findNeighbors() {
+    
     CompiledCell north = cMap.getCell(x, y-1);
     CompiledCell south = cMap.getCell(x, y+1);
     CompiledCell east = cMap.getCell(x+1, y);
@@ -62,7 +68,7 @@ class CompiledCell implements Comparable<CompiledCell> {
       ret_values[3] = true;
     }
 
-    return ret_values;
+    this.cityNeighbors = ret_values;
   }
 
   void drawCellDetail() {
@@ -72,6 +78,7 @@ class CompiledCell implements Comparable<CompiledCell> {
   void drawObjects() {
     // draw trees and buildings
     for (TileObject o : this.tileObjects) {
+      o.update();
       o.display();
     }
   }
@@ -174,8 +181,11 @@ class CompiledCell implements Comparable<CompiledCell> {
     PVector A = v1.copy();
 
     // if in the bottom triangle use other plane
-    if (y-((CELL_SCALE-1)-x) > 0) {
+    if (y+x-(CELL_SCALE-1) > 0) {
       A = v4.copy();
+      print("using bottom    ");
+    } else {
+      print("using top    ");
     }
     PVector B = v3.copy();
     PVector C = v2.copy();
@@ -190,7 +200,7 @@ class CompiledCell implements Comparable<CompiledCell> {
 
 
     float zHeight = ((ABAC.x*(v1.x+float(x)))+(ABAC.y*(v1.y+float(y)))-v1.z+d)/-ABAC.z;
-    //println(ABAC,d,zHeight);
+    println(x, y, ABAC, d, zHeight);
     return zHeight;
   }
 

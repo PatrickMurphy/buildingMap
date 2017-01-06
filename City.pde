@@ -58,18 +58,17 @@ class City {
     CompiledCell  testCell;
     for (int y = 0; y<GRID_ROWS-1; y++) {
       for (int x = 0; x<GRID_COLUMNS-1; x++) {
-        testCell = cMap.getCell(x,y);
-
+        testCell = cMap.getCell(x, y);
+        testCell.findNeighbors();
         if (testCell.isCity()) {
           testCell.texture = terrain_textures[testCell.id].getTexture(new boolean[]{true, true, true, true});
         } else {
           testCell.texture = terrain_textures[testCell.id].getTexture(testCell.getNeighbors());
         }
-        // max 400 buildings, don't place on steep hills, population density over 30
+        // don't place on steep hills, population density over 30
         if (testCell.isCity() && !testCell.isRoad() && !testCell.hasBuilding() && testCell.getPopulation() > 30 && testCell.getSlope() < 45 && testCell.x < GRID_COLUMNS-1) { 
           buildingsPlaced++;
           loadPCT = ((y*(GRID_ROWS-1))+x)/(GRID_ROWS-1)*(GRID_COLUMNS-1);
-          //testCell.setHasBuilding();
           testCell.addBuilding(new RandomBuilding((int)testCell.v1.x, (int)testCell.v1.y, (int)testCell.getMaxHeight(), CELL_SCALE, testCell.getPopulation()));
         }
       }

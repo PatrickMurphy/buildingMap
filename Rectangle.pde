@@ -8,6 +8,9 @@ class Rectangle implements Shape {
   Rectangle(float x, float y, float z, int wid, int len, PImage text) {
     this(x, y, z, wid, len, color(55), color(55), text);
   }
+  Rectangle(float x, float y, float z, int wid, int len, color fill) {
+    this(x, y, z, wid, len, fill, color(55), null);
+  }
   Rectangle(float x, float y, float z, int wid, int len, color fill, color stroke, PImage texture) {
     // generate random shapes
     this.x = x;
@@ -28,11 +31,11 @@ class Rectangle implements Shape {
     fill(fill);
     //stroke(stroke);
     // println(x, map(x, 0, GRID_WIDTH, 0, width), width*(this.wid/(float)GRID_WIDTH));
-    rect(map(x, 0, GRID_WIDTH-CELL_SCALE, 0, width), map(y, 0, GRID_HEIGHT-CELL_SCALE, 0, height), (float)width*(this.wid/((float)GRID_WIDTH-(float)CELL_SCALE)), (float)height*(this.len/((float)GRID_HEIGHT-(float)CELL_SCALE)));
+    rect(x, y, wid,len);
   }
   void display() {    
     // make top
-    fill(fill);
+    fill(55);
     //stroke(stroke);
     beginShape();
     vertex(x, y, this.z+this.buildingHeight);
@@ -40,10 +43,12 @@ class Rectangle implements Shape {
     vertex(x+wid, y+len, this.z+this.buildingHeight);
     vertex(x+wid, y, this.z+this.buildingHeight);
     endShape();
-
+    fill(fill);
     // make front
     beginShape();
-    texture(texture);
+    if(texture != null){
+      texture(texture);
+    }
     vertex(x, y, this.z, 0, 0);
     vertex(x, y, this.z+this.buildingHeight, 0, 1);
     vertex(x+wid, y, this.z+this.buildingHeight, 1, 1);
@@ -52,7 +57,9 @@ class Rectangle implements Shape {
 
     // make back
     beginShape();
-    texture(texture);
+    if(texture != null){
+      texture(texture);
+    }
     vertex(x+wid, y+len, this.z, 0, 0);
     vertex(x+wid, y+len, this.z+this.buildingHeight, 0, 1);
     vertex(x, y+len, this.z+this.buildingHeight, 1, 1);
@@ -61,7 +68,9 @@ class Rectangle implements Shape {
 
     // make right
     beginShape();
-    texture(texture);
+    if(texture != null){
+      texture(texture);
+    }
     vertex(x, y, this.z, 0, 0);
     vertex(x, y, this.z+this.buildingHeight, 0, 1);
     vertex(x, y+len, this.z+this.buildingHeight, 1, 1);
@@ -70,13 +79,14 @@ class Rectangle implements Shape {
 
     // make left
     beginShape();
-    texture(texture);
+    if(texture != null){
+      texture(texture);
+    }
     vertex(x+wid, y, this.z, 0, 0);
     vertex(x+wid, y, this.z+this.buildingHeight, 0, 1);
     vertex(x+wid, y+len, this.z+this.buildingHeight, 1, 1);
     vertex(x+wid, y+len, this.z, 1, 0);
     endShape();
-
 
     drawBase();
   }

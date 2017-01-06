@@ -21,6 +21,7 @@ final int MAX_TREES = 175;
 final int MAP_HEIGHT_SCALE = 20*CELL_SCALE;
 
 final boolean FULLSCREEN = false;
+final boolean USE_BUILDING_TEXTURES = true;
 
 PImage testTexture = (new TextureGenerator(CELL_SCALE, CELL_SCALE, color(75, 147, 65))).getTexture();
 
@@ -48,6 +49,7 @@ CompiledMap cMap;
 // array of pre loaded textures
 PImage[] building_textures; 
 TextureGenerator[] terrain_textures;
+color[] building_colors;
 
 void setup() {
   size(800, 800, P3D);
@@ -65,7 +67,7 @@ void startLoading() {
   println(GRID_COLUMNS, GRID_ROWS, GRID_COLUMNS*GRID_ROWS); // print the grid width and length, and the total number of cells
 
   // texture mode for buildings
- // textureWrap(REPEAT);
+  // textureWrap(REPEAT);
   textureMode(NORMAL);
   preLoadTextures();
 
@@ -85,8 +87,22 @@ void generateNewMap() {
 void preLoadTextures() {
   building_textures = new PImage[11];
   for (int i = 0; i<11; i++) {
-    building_textures[i] = loadImage("building_office"+(i+3)+".png");
+    building_textures[i] = loadImage("\\Assets\\Texture\\Buildings\\building_office"+(i+3)+".png");
   }
+
+  building_colors = new color[11];
+  building_colors[0] = color(202, 203, 198);
+  building_colors[1] = color(190, 198, 200);
+  building_colors[2] = color(128, 130, 132);
+  building_colors[3] = color(194, 188, 177);
+  building_colors[4] = color(84, 98, 111);
+  building_colors[5] = color(101, 106, 112);
+  building_colors[6] = color(111, 116, 123);//81,86,100 ,153,156,157
+  building_colors[7] = color(107, 106, 108 ); //183,180,176 
+  building_colors[8] = color(151, 126, 102); //,166,181,198,97,97,97 
+  building_colors[9] = color(107, 90, 90);
+  building_colors[10] = color(141, 144, 148);
+
   terrain_textures = new TextureGenerator[13];
   terrain_textures[0] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(30, 144, 255));
   terrain_textures[1] = new TextureGenerator(CELL_SCALE, CELL_SCALE, color(222, 184, 135));
@@ -105,6 +121,7 @@ void draw() {
     drawLoading();
   } else {
     if (displayMode==0) {
+      //background();
       // draw the terrain, and the buildings
       cMap.drawMap();
       cMap.drawCellDetails();
@@ -113,6 +130,11 @@ void draw() {
         // draw a ray up and down at camera look point
         CompiledCell lookCell = cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y);
         stroke(255, 0, 0); // red
+        strokeWeight(5);
+        point(lookCell.v1.x+CELL_SCALE/5, lookCell.v1.y+CELL_SCALE/5, cMap.getHeightAt(lookCell.v1.x+CELL_SCALE/5, lookCell.v1.y+CELL_SCALE/5));
+
+        //point(lookCell.v1.x, lookCell.v1.y, cMap.getHeightAt(lookCell.v1.x,lookCell.v1.y));
+        strokeWeight(1);
         line(lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 0, lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 1000);
         noStroke();
       }
@@ -130,26 +152,26 @@ void draw() {
         cMap.pMap.display2D(color(15, 15, 250), color(250, 15, 15));
       } else if (displayMode == 4) {
         background(220);
-        //for(int i = 0; i < terrain_textures.length;i++){
-        //image(terrain_textures[i].getTexture(), 0, i*50);
-        // image(terrain_textures[i].getTexture(), 50, i*50);
-        // }       
-        image(cMap.row_textures[0], 0, 0);
-        image(cMap.row_textures[1], 0, 50);
-        image(cMap.row_textures[2], 0, 100);
-        image(cMap.row_textures[3], 0, 150);
-        image(cMap.row_textures[4], 0, 200);
-        image(cMap.row_textures[5], 0, 250);
-        image(cMap.row_textures[6], 0, 300);
-        image(cMap.row_textures[7], 0, 350);
-        image(cMap.row_textures[8], 0, 400);
-        image(cMap.row_textures[9], 0, 450);
-        image(cMap.row_textures[10], 0, 500);
-        image(cMap.row_textures[11], 0, 550);
-        image(cMap.row_textures[12], 0, 600);
-        image(cMap.row_textures[13], 0, 650);
-        image(cMap.row_textures[14], 0, 700);
-        image(cMap.row_textures[15], 0, 750);
+        for (int i = 0; i < terrain_textures.length; i++) {
+          image(terrain_textures[i].getTexture(), 0, i*CELL_SCALE);
+          image(terrain_textures[i].getTexture(), CELL_SCALE, i*CELL_SCALE);
+        }       
+        //image(cMap.row_textures[0], 0, 0);
+        //image(cMap.row_textures[1], 0, 50);
+        //image(cMap.row_textures[2], 0, 100);
+        //image(cMap.row_textures[3], 0, 150);
+        //image(cMap.row_textures[4], 0, 200);
+        //image(cMap.row_textures[5], 0, 250);
+        //image(cMap.row_textures[6], 0, 300);
+        //image(cMap.row_textures[7], 0, 350);
+        //image(cMap.row_textures[8], 0, 400);
+        //image(cMap.row_textures[9], 0, 450);
+        //image(cMap.row_textures[10], 0, 500);
+        //image(cMap.row_textures[11], 0, 550);
+        //image(cMap.row_textures[12], 0, 600);
+        //image(cMap.row_textures[13], 0, 650);
+        //image(cMap.row_textures[14], 0, 700);
+        //image(cMap.row_textures[15], 0, 750);
       }
       camera.endHUD();
     }

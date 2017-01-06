@@ -15,7 +15,7 @@ class Roof extends Rectangle implements Shape {
 
   void display() {
     // make base
-    fill(fill);
+    fill(55);
     //stroke(stroke);
     noStroke();
     beginShape();

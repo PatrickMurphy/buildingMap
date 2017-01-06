@@ -8,11 +8,14 @@ class Circle implements Shape {
   Circle(int x, int y, int z, int r) {
     this(x, y, z, r, r, color(43), color(43), null);
   }
+  Circle(int x, int y, int z, int wid, int len) {
+    this(x, y, z, wid, len, color(43), color(43), null);
+  }
   Circle(int x, int y, int z, int wid, int len, PImage text) {
     this(x, y, z, wid, len, color(43), color(43), text);
   }
-  Circle(int x, int y, int z, int wid, int len) {
-    this(x, y, z, wid, len, color(43), color(43), null);
+  Circle(int x, int y, int z, int wid, int len, color fill) {
+    this(x, y, z, wid, len, fill, color(43), null);
   }
   Circle(int x, int y, int z, int wid, int len, color fill, color stroke, PImage texture) {
     // generate random shapes
@@ -31,7 +34,7 @@ class Circle implements Shape {
     ellipse(map(x, 0, GRID_WIDTH-CELL_SCALE, 0, width), map(y, 0, GRID_HEIGHT-CELL_SCALE, 0, height), width*(this.wid/((float)GRID_WIDTH-CELL_SCALE)), height*(this.len/((float)GRID_HEIGHT-CELL_SCALE)));
   }
   void display() {
-    fill(fill);
+    fill(55);
     noStroke();
     float sides = 10;
     float h = this.getHeight();
@@ -47,16 +50,18 @@ class Circle implements Shape {
       vertex( this.x+x, this.y+y, this.z+halfHeight );
     }
     endShape(CLOSE);
-
+    fill(fill);
     // draw body
     beginShape(TRIANGLE_STRIP);
-    texture(texture);
+    if (texture != null) {
+      texture(texture);
+    }
     for (int i = 0; i < sides + 1; i++) {
-      float tc = (i/(float)(2*PI))*3;
+      float tc = (i/(float)(2*PI));
       float x = cos( radians( i * angle ) ) * r;
       float y = sin( radians( i * angle ) ) * r;
       vertex( this.x+x, this.y+y, this.z+halfHeight, tc, 0);
-      vertex( this.x+x, this.y+y, this.z, tc, 3);
+      vertex( this.x+x, this.y+y, this.z, tc, 1);
     }
     endShape(CLOSE);
   }

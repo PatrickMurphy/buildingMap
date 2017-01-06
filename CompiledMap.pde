@@ -87,8 +87,8 @@ class CompiledMap {
     // takes real x and y
     x = min(x, GRID_WIDTH);
     y = min(y, GRID_HEIGHT);
-    int tempx = (int)map(x, 0, GRID_WIDTH, 0, GRID_COLUMNS-1);
-    int tempy = (int)map(y, 0, GRID_HEIGHT, 0, GRID_ROWS-1);
+    int tempx = floor(map(x, 0, GRID_WIDTH, 0, GRID_COLUMNS-1));
+    int tempy = floor(map(y, 0, GRID_HEIGHT, 0, GRID_ROWS-1));
 
     return this.getCell(tempx, tempy).getHeightAt(x-(tempx*CELL_SCALE), y-(tempy*CELL_SCALE));
   }
@@ -122,7 +122,7 @@ class CompiledMap {
   }
 
   void drawMap() {
-   // stroke(60);
+    //stroke(60);
     for (int y = 0; y<rows-1; y++) {
       //fill(lerpColor(0,255,y/float(rows-1)));
       beginShape(TRIANGLE_STRIP);

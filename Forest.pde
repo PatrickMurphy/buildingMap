@@ -15,7 +15,7 @@ class Forest {
       int randY = (int)random(0, GRID_ROWS-1);
       CompiledCell testCell = cMap.getCell(randX, randY);
 
-      if (testCell.id >= 2 && testCell.id <= 5 && !testCell.isRoad() && !testCell.isForest() && (!testCell.isCity())) {
+      if (testCell.id >= 2 && testCell.id <= 6 && !testCell.isRoad() && !testCell.isForest() && (!testCell.isCity())) {
         PVector tree_pos = new PVector(CELL_SCALE/2, CELL_SCALE/2, 0).add(testCell.v1);
         tree_pos.z = testCell.getHeightAt(CELL_SCALE/2, CELL_SCALE/2);
         this.addTree(new Tree(tree_pos, map(testCell.getPopulation(), 27, 100, 1, .1)), testCell);
