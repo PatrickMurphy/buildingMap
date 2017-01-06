@@ -130,11 +130,11 @@ void draw() {
         // draw a ray up and down at camera look point
         CompiledCell lookCell = cMap.getCell((int)lookAtPoint.x, (int)lookAtPoint.y);
         stroke(255, 0, 0); // red
-        strokeWeight(5);
-        point(lookCell.v1.x+CELL_SCALE/5, lookCell.v1.y+CELL_SCALE/5, cMap.getHeightAt(lookCell.v1.x+CELL_SCALE/5, lookCell.v1.y+CELL_SCALE/5));
+        //strokeWeight(5);
+        //point(lookCell.v1.x+CELL_SCALE/5, lookCell.v1.y+CELL_SCALE/5, cMap.getHeightAt(lookCell.v1.x+CELL_SCALE/5, lookCell.v1.y+CELL_SCALE/5));
 
         //point(lookCell.v1.x, lookCell.v1.y, cMap.getHeightAt(lookCell.v1.x,lookCell.v1.y));
-        strokeWeight(1);
+        //strokeWeight(1);
         line(lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 0, lookCell.v1.x+CELL_SCALE/2, lookCell.v1.y+CELL_SCALE/2, 1000);
         noStroke();
       }
@@ -179,6 +179,8 @@ void draw() {
   camera.beginHUD();
   text("FPS: "+frameRate, 15, 15);
   text("X:" + lookAtPoint.x + " Y: " + lookAtPoint.y, 15, 25);
+  if (!loading)
+    text("HSeed: " + cMap.hSeed + " PSeed: "+cMap.pSeed, 15, 35);
   camera.endHUD();
 }
 

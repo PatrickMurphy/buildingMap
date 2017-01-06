@@ -77,9 +77,9 @@ class CompiledCell implements Comparable<CompiledCell> {
 
   void drawObjects() {
     // draw trees and buildings
-    for (TileObject o : this.tileObjects) {
-      o.update();
-      o.display();
+    for (int i = 0; i < this.tileObjects.size(); i++) {
+      this.tileObjects.get(i).update();
+      this.tileObjects.get(i).display();
     }
   }
 

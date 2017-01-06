@@ -115,8 +115,8 @@ class RandomBuilding implements TileObject {
     //rect(x,y,wid,len);
     //rect(x+this.padding, y+this.padding, wid-this.padding*2,len-this.padding*2);
     //noStroke();
-    for (Shape s : shapes) {
-      s.display();
+    for (int i = 0; i < this.shapes.size(); i++) {
+      shapes.get(i).display();
     }
   }
 }

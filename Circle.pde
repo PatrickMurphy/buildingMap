@@ -2,8 +2,9 @@ class Circle implements Shape {
   int x, y, z;
   int wid, len;
   color fill, stroke;
-  float cirlceHeight;
+  float circleHeight;
   PImage texture;
+  float sides, angle;
 
   Circle(int x, int y, int z, int r) {
     this(x, y, z, r, r, color(43), color(43), null);
@@ -27,6 +28,8 @@ class Circle implements Shape {
     this.fill = fill;
     this.stroke = stroke;
     this.texture = texture;
+    this.sides = 10;
+    this.angle = 360 / this.sides;
   }
   void display2D() {
     fill(fill);
@@ -36,18 +39,12 @@ class Circle implements Shape {
   void display() {
     fill(55);
     noStroke();
-    float sides = 10;
-    float h = this.getHeight();
-    float r = wid;
-
-    float angle = 360 / sides;
-    float halfHeight = h;
     // draw top shape
     beginShape();
     for (int i = 0; i < sides; i++) {
-      float x = cos( radians( i * angle ) ) * r;
-      float y = sin( radians( i * angle ) ) * r;
-      vertex( this.x+x, this.y+y, this.z+halfHeight );
+      float x = cos( radians( i * angle ) ) * wid;
+      float y = sin( radians( i * angle ) ) * wid;
+      vertex( this.x+x, this.y+y, this.z+this.circleHeight);
     }
     endShape(CLOSE);
     fill(fill);
@@ -58,9 +55,9 @@ class Circle implements Shape {
     }
     for (int i = 0; i < sides + 1; i++) {
       float tc = (i/(float)(2*PI));
-      float x = cos( radians( i * angle ) ) * r;
-      float y = sin( radians( i * angle ) ) * r;
-      vertex( this.x+x, this.y+y, this.z+halfHeight, tc, 0);
+      float x = cos( radians( i * angle ) ) * wid;
+      float y = sin( radians( i * angle ) ) * wid;
+      vertex( this.x+x, this.y+y, this.z+this.circleHeight, tc, 0);
       vertex( this.x+x, this.y+y, this.z, tc, 1);
     }
     endShape(CLOSE);
@@ -87,9 +84,9 @@ class Circle implements Shape {
   }
 
   float getHeight() {
-    return this.cirlceHeight;
+    return this.circleHeight;
   }
   void setHeight(float h) {
-    this.cirlceHeight = h;
+    this.circleHeight = h;
   }
 }
